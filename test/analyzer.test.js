@@ -4,6 +4,7 @@ import request from 'supertest';
 import { createApp } from '../server/app.js';
 import { createGeminiAnalyzer } from '../server/gemini.js';
 import { AppError } from '../server/errors.js';
+import { analysisResponseSchema } from '../shared/analysis.js';
 
 const result = { summary: 'Apple presenta un teléfono.', sentiment: 'positive', language: 'es', keywords: ['Apple', 'teléfono'], category: 'tecnología' };
 const app = (analyze = async () => result, extra = {}) => createApp({ analyze, distPath: 'nonexistent-test-dist', ...extra });
@@ -12,7 +13,9 @@ const provider = (data, status = 200) => createGeminiAnalyzer({ apiKey: 'test-pl
 
 test('API entrega contrato exacto, recorta espacios y evita cache', async () => {
   const res = await request(app(async text => { assert.equal(text, 'Hola'); return result; })).post('/api/analyze').send({ text: ' Hola ' }).expect(200);
-  assert.deepEqual(res.body, result); assert.equal(res.headers['cache-control'], 'no-store');
+  const parsed = analysisResponseSchema.parse(res.body);
+  const { analyzedAt, ...content } = parsed;
+  assert.deepEqual(content, result); assert.ok(Number.isFinite(Date.parse(analyzedAt))); assert.equal(res.headers['cache-control'], 'no-store');
 });
 for (const [label, body] of Object.entries({ vacío: { text: '  ' }, tipo: { text: 42 }, ausente: {}, largo: { text: 'a'.repeat(12001) }, extra: { text: 'Hola', key: 'no' }, nulo: null })) {
   test(`API rechaza texto ${label} antes de llamar proveedor`, async () => {
