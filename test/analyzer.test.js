@@ -51,3 +51,21 @@ test('Gemini oculta fallo de red', async () => {
   const analyze = createGeminiAnalyzer({ apiKey: 'test-placeholder', fetchImpl: async () => { throw new Error('private-host'); } });
   await assert.rejects(analyze('Hola'), e => e.status === 502 && !e.message.includes('private-host'));
 });
+test('Gemini reintenta una vez ante alta demanda y conserva un timeout compartido', async () => {
+  let calls = 0;
+  let firstSignal;
+  const analyze = createGeminiAnalyzer({ apiKey: 'test-placeholder', retryDelayMs: 0, fetchImpl: async (_url, options) => {
+    calls++;
+    if (calls === 1) { firstSignal = options.signal; return new Response('{}', { status: 503 }); }
+    assert.equal(options.signal, firstSignal);
+    return new Response(JSON.stringify(interaction()));
+  } });
+  assert.deepEqual(await analyze('Hola'), result);
+  assert.equal(calls, 2);
+});
+test('Gemini limita el reintento y distingue alta demanda de una key inválida', async () => {
+  let calls = 0;
+  const analyze = createGeminiAnalyzer({ apiKey: 'test-placeholder', retryDelayMs: 0, fetchImpl: async () => { calls++; return new Response('{}', { status: 503 }); } });
+  await assert.rejects(analyze('Hola'), e => e.status === 503 && e.code === 'PROVIDER_BUSY');
+  assert.equal(calls, 2);
+});

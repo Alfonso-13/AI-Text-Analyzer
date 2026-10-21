@@ -18,7 +18,7 @@ function stop(code = 0) {
   process.exitCode = code;
 }
 for (const args of [
-  ['--watch', '--env-file-if-exists=.env', 'server/index.js'],
+  ['--use-system-ca', '--watch', '--env-file-if-exists=.env', 'server/index.js'],
   [resolve('node_modules/vite/bin/vite.js')],
 ]) {
   const child = spawn(process.execPath, args, { stdio: 'inherit', env: { ...process.env, PORT: '3001' } });

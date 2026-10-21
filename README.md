@@ -15,6 +15,18 @@ Copy-Item .env.example .env
 
 Edita `.env` localmente, agrega tu key y reinicia el servidor. No compartas la key ni la agregues al repositorio.
 
+El archivo debe estar en la raíz del proyecto, con una variable por línea, sin comas ni llaves JSON:
+
+```dotenv
+GEMINI_API_KEY=tu_key_aqui
+GEMINI_MODEL=gemini-3.5-flash
+PORT=3001
+```
+
+No uses el prefijo `VITE_` para la key. Reinicia el backend después de cambiar `.env`. Los comandos de arranque usan `--use-system-ca` para confiar también en los certificados del sistema operativo, sin desactivar la validación TLS.
+
+Un `503` con código `PROVIDER_BUSY` indica alta demanda del modelo en Google, no una key inválida. La app reintenta una sola vez, dentro del mismo timeout de 30 segundos. Si continúa, espera y vuelve a analizar o configura otro modelo disponible en tu cuenta.
+
 | Variable | Uso | Valor predeterminado |
 | --- | --- | --- |
 | `GEMINI_API_KEY` | Obligatoria para análisis reales; solo servidor | Sin valor |
