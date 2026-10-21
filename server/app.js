@@ -8,6 +8,10 @@ import { AppError } from './errors.js';
 
 export function createApp({ analyze, rateLimitMax = 20, distPath = resolve('dist') } = {}) {
   const app = express();
+  
+  // Array en memoria
+  const analysisHistory = [];
+
   app.disable('x-powered-by');
   app.use(helmet({ contentSecurityPolicy: { directives: { 'style-src': ["'self'", "'unsafe-inline'"] } } }));
   app.use('/api', (_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
@@ -23,7 +27,33 @@ export function createApp({ analyze, rateLimitMax = 20, distPath = resolve('dist
     const result = await analyze(parsed.data.text);
     const checked = analysisSchema.safeParse(result);
     if (!checked.success) throw new AppError(502, 'INVALID_ANALYSIS', 'El proveedor devolvió un análisis inválido.');
+
+    //Fecha actual
+    checked.data.analyzedAt = new Date().toISOString();
+
+    //salvar en memoria
+    analysisHistory.unshift(checked.data);
+
     res.json(checked.data);
+  });
+  
+  // REQUERIMIENTO 1: Endpoint /api/history
+  app.get('/api/history', (_req, res) => {
+  const records = [...analysisHistory]
+    .sort((a, b) => Date.parse(b.analyzedAt) - Date.parse(a.analyzedAt))
+    .slice(0, 50);
+    
+  res.send(records);
+  });
+
+  // REQUERIMIENTO 2: Endpoint /api/summary
+  app.get('/api/summary', (_req, res) => {
+    const summary = analysisHistory.reduce((acc, item) => {
+      const category = item.category || 'general';
+      acc[category] = (acc[category] || 0) + 1;
+      return acc;
+    }, {});
+    res.json(summary);
   });
   app.use('/api', (_req, res) => res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Endpoint no encontrado.' } }));
   if (existsSync(resolve(distPath, 'index.html'))) {
