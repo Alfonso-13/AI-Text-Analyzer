@@ -8,11 +8,6 @@ import { AppError } from './errors.js';
 
 export function createApp({ analyze, rateLimitMax = 20, distPath = resolve('dist') } = {}) {
   const app = express();
-  
-  // Session-only storage, bounded to avoid growing memory indefinitely.
-  const analysisHistory = [];
-  let sequence = 0;
-  const historyCapacity = 500;
 
   app.disable('x-powered-by');
   app.use(helmet({ contentSecurityPolicy: { directives: { 'style-src': ["'self'", "'unsafe-inline'"] } } }));
@@ -27,40 +22,13 @@ export function createApp({ analyze, rateLimitMax = 20, distPath = resolve('dist
     const parsed = inputSchema.safeParse(req.body);
     if (!parsed.success) throw new AppError(400, 'INVALID_TEXT', 'Ingresa un texto de entre 1 y 12,000 caracteres.');
     const result = await analyze(parsed.data.text);
+    // Treat the model as an untrusted provider: only validated fields reach the client.
     const checked = analysisSchema.safeParse(result);
     if (!checked.success) throw new AppError(502, 'INVALID_ANALYSIS', 'El proveedor devolvió un análisis inválido.');
 
+    // The server, not Gemini, owns metadata used to order the local browser history.
     const record = { ...checked.data, analyzedAt: new Date().toISOString() };
-    analysisHistory.unshift({ sequence: ++sequence, record });
-    if (analysisHistory.length > historyCapacity) analysisHistory.pop();
     res.json(record);
-  });
-  
-  app.get('/api/history', (req, res) => {
-    // Preserve the existing array response when no pagination is requested.
-    if (req.query.limit === undefined && req.query.before === undefined) {
-      return res.json(analysisHistory.slice(0, 50).map(entry => entry.record));
-    }
-    const rawLimit = req.query.limit ?? '10';
-    const rawBefore = req.query.before;
-    if (typeof rawLimit !== 'string' || !/^[1-9]\d?$/.test(rawLimit) || Number(rawLimit) > 50 ||
-        (rawBefore !== undefined && (typeof rawBefore !== 'string' || !/^[1-9]\d*$/.test(rawBefore) || !Number.isSafeInteger(Number(rawBefore))))) {
-      throw new AppError(400, 'INVALID_PAGINATION', 'Usa limit entre 1 y 50 y un cursor válido.');
-    }
-    const eligible = analysisHistory.filter(entry => rawBefore === undefined || entry.sequence < Number(rawBefore));
-    const page = eligible.slice(0, Number(rawLimit));
-    const hasMore = eligible.length > page.length;
-    res.json({ items: page.map(entry => entry.record), hasMore, nextCursor: hasMore ? String(page.at(-1).sequence) : null });
-  });
-
-  // REQUERIMIENTO 2: Endpoint /api/summary
-  app.get('/api/summary', (_req, res) => {
-    const summary = analysisHistory.reduce((acc, { record }) => {
-      const category = record.category;
-      acc[category] = (acc[category] || 0) + 1;
-      return acc;
-    }, {});
-    res.json(summary);
   });
   app.use('/api', (_req, res) => res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Endpoint no encontrado.' } }));
   if (existsSync(resolve(distPath, 'index.html'))) {

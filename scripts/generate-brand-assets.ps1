@@ -4,8 +4,8 @@ $assetDir = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../public'))
 [IO.Directory]::CreateDirectory($assetDir) | Out-Null
 function Draw-Mark($graphics, [single]$x, [single]$y, [single]$size) {
     $state = $graphics.Save()
-    $lime = [Drawing.SolidBrush]::new([Drawing.ColorTranslator]::FromHtml('#c1ff00'))
-    $ink = [Drawing.SolidBrush]::new([Drawing.ColorTranslator]::FromHtml('#181b19'))
+    $lime = [Drawing.SolidBrush]::new([Drawing.ColorTranslator]::FromHtml('#e30613'))
+    $ink = [Drawing.SolidBrush]::new([Drawing.ColorTranslator]::FromHtml('#ffffff'))
     $pen = [Drawing.Pen]::new($ink, 3)
     $pen.StartCap = 'Round'; $pen.EndCap = 'Round'
     $rounded = [Drawing.Drawing2D.GraphicsPath]::new()
@@ -63,15 +63,15 @@ try {
 } finally { $writer.Dispose(); $stream.Dispose() }
 $card = [Drawing.Bitmap]::new(1200,630); $canvas = [Drawing.Graphics]::FromImage($card)
 $white = [Drawing.SolidBrush]::new([Drawing.ColorTranslator]::FromHtml('#f4f5f5'))
-$muted = [Drawing.SolidBrush]::new([Drawing.ColorTranslator]::FromHtml('#aeb9a4'))
-$limeBrush = [Drawing.SolidBrush]::new([Drawing.ColorTranslator]::FromHtml('#c1ff00'))
-$inkBrush = [Drawing.SolidBrush]::new([Drawing.ColorTranslator]::FromHtml('#181b19'))
+$muted = [Drawing.SolidBrush]::new([Drawing.ColorTranslator]::FromHtml('#bdbdbd'))
+$limeBrush = [Drawing.SolidBrush]::new([Drawing.ColorTranslator]::FromHtml('#e30613'))
+$inkBrush = [Drawing.SolidBrush]::new([Drawing.ColorTranslator]::FromHtml('#ffffff'))
 $brandFont = [Drawing.Font]::new('Arial',30,[Drawing.FontStyle]::Bold,[Drawing.GraphicsUnit]::Pixel)
 $headline = [Drawing.Font]::new('Arial',76,[Drawing.FontStyle]::Bold,[Drawing.GraphicsUnit]::Pixel)
 $bodyFont = [Drawing.Font]::new('Arial',26,[Drawing.FontStyle]::Regular,[Drawing.GraphicsUnit]::Pixel)
 try {
     $canvas.SmoothingMode = 'AntiAlias'; $canvas.TextRenderingHint = 'AntiAliasGridFit'
-    $canvas.Clear([Drawing.ColorTranslator]::FromHtml('#181b19'))
+    $canvas.Clear([Drawing.ColorTranslator]::FromHtml('#121212'))
     Draw-Mark $canvas 75 63 76
     $canvas.DrawString('texta', $brandFont, $white, 169, 82)
     $canvas.DrawString('Mucho texto.', $headline, $white, 68, 211)

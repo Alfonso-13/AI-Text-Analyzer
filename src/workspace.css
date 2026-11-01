@@ -21,8 +21,8 @@
 .sample-kind:hover:not(:disabled) { background: #e9f5d0; border-color: #b7d980; }
 .feature-strip { flex-wrap: wrap; gap: 10px; }
 .sample-note { font-size: 10px; color: #818c76; line-height: 1.6; margin: 10px 0 0; }
-.brand-loading { display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; min-height: 400px; padding: 32px 24px; background: radial-gradient(ellipse at 50% 35%, #f3f9e7 0, transparent 65%); }
-.brand-loader { width: 88px; height: 88px; display: grid; place-items: center; background: #181d13; border-radius: 24px; color: var(--lime); position: relative; box-shadow: 0 0 0 8px #c1ff0020; margin-bottom: 29px; }
+.brand-loading { display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; min-height: 400px; padding: 32px 24px; background: transparent; }
+.brand-loader { width: 88px; height: 88px; display: grid; place-items: center; background: #181818; border-radius: 24px; color: var(--lime); position: relative; box-shadow: 0 0 0 8px #e3061320; margin-bottom: 29px; }
 .brand-loader > span { font-size: 54px; animation: spin 8s linear infinite; line-height: 1; }
 .brand-loader i { position: absolute; width: 7px; height: 7px; background: var(--lime); border-radius: 50%; bottom: -15px; animation: brand-dot 1.2s ease-in-out infinite; }
 .brand-loader i:nth-child(2) { left: 24px; }
@@ -97,7 +97,7 @@
   .powered { display: none; }
 }
 @media (max-width: 740px) {
-  .rail { display: flex; position: fixed; width: 100%; height: auto; inset: auto 0 0; padding: 5px 10px calc(5px + env(safe-area-inset-bottom)); background: #171c14; z-index: 20; border-top: 1px solid #3d4a2f; }
+  .rail { display: flex; position: fixed; width: 100%; height: auto; inset: auto 0 0; padding: 5px 10px calc(5px + env(safe-area-inset-bottom)); background: #121212; z-index: 20; border-top: 1px solid var(--ui-accent); }
   .rail > .logo-symbol,.rail-line,.rail-bottom { display: none; }
   .main-nav { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 5px; }
   .main-nav a { flex-direction: column; justify-content: center; gap: 3px; min-height: 56px; padding: 6px; font-size: 10px; }
