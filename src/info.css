@@ -2,25 +2,6 @@
   padding-bottom: 26px;
 }
 
-.demo-info-note {
-  display: flex;
-  gap: 8px 16px;
-  margin-bottom: 20px;
-  padding: 12px 15px;
-  border: 1px solid var(--ui-accent-border);
-  border-radius: 9px;
-  background: var(--ui-accent-soft);
-  font-size: 11px;
-}
-
-.demo-info-note strong {
-  flex: 0 0 auto;
-}
-
-.demo-info-note span {
-  color: var(--text-muted);
-}
-
 .info-hero {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
@@ -321,10 +302,6 @@
 }
 
 @media (max-width: 740px) {
-  .demo-info-note {
-    flex-direction: column;
-  }
-
   .info-hero {
     grid-template-columns: 1fr;
     gap: 20px;

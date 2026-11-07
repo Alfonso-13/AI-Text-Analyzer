@@ -52,6 +52,15 @@ test('Cada almacenamiento conserva un historial aislado y persistente', () => {
   assert.deepEqual(readHistory(secondBrowser), []);
 });
 
+test('La demo conserva la consulta de ejemplo junto con su respuesta mock', () => {
+  const storage = createStorage();
+  const demoRecord = { ...response, sourceText: 'Consulta de ejemplo', simulated: true };
+
+  assert.deepEqual(addToHistory(storage, demoRecord), [demoRecord]);
+  assert.deepEqual(readHistory(storage), [demoRecord]);
+  assert.match(storage.getItem(HISTORY_STORAGE_KEY), /Consulta de ejemplo/);
+});
+
 test('El historial ignora datos inválidos y se limita a 500 registros', () => {
   const storage = createStorage();
   storage.setItem(HISTORY_STORAGE_KEY, JSON.stringify([{ ...response, sentiment: 'inventado' }, response]));
@@ -93,5 +102,8 @@ test('Textos aleatorios están disponibles por tipo sin red y sin repetición in
   }
   assert.equal(pickSample('desconocido'), null);
   assert.equal(new Set(samples.map(item => item.text)).size, samples.length);
-  for (const sample of samples) assert.ok(sample.text.length > 0 && sample.text.length <= MAX_TEXT_LENGTH);
+  for (const sample of samples) {
+    assert.ok(sample.text.length > 0 && sample.text.length <= MAX_TEXT_LENGTH);
+    assert.equal(analysisSchema.safeParse(sample.analysis).success, true);
+  }
 });

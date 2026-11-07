@@ -1,18 +1,82 @@
 [
-  { "kind": "articles", "text": "Un equipo universitario presentó un sistema de riego que mide la humedad del suelo y solo activa el agua cuando es necesario. Durante una prueba piloto, las plantas se mantuvieron saludables y el consumo de agua disminuyó. El proyecto todavía debe evaluarse durante una temporada completa." },
-  { "kind": "articles", "text": "La biblioteca del barrio ampliará su horario los sábados y organizará talleres gratuitos de lectura. La iniciativa busca que más familias encuentren un espacio para aprender y compartir historias. Los vecinos recibieron la noticia con entusiasmo." },
-  { "kind": "articles", "text": "Las fuertes lluvias provocaron daños en varios caminos rurales y retrasaron el transporte de alimentos. Comerciantes locales reportaron pérdidas y pidieron acelerar las reparaciones. Las autoridades aún no han confirmado una fecha de reapertura." },
-  { "kind": "articles", "text": "Researchers are comparing two methods of storing solar energy. The first uses batteries, while the second stores heat in insulated tanks. Their report describes the equipment and testing process without declaring a final winner." },
-  { "kind": "posts", "text": "¡Por fin terminé mi primer proyecto de programación! Hubo muchos errores en el camino, pero ver la aplicación funcionando hizo que todo valiera la pena. Gracias a quienes me ayudaron a no rendirme." },
-  { "kind": "posts", "text": "Mi pedido llegó tarde, incompleto y con el empaque roto. Ya escribí a soporte dos veces y sigo sin respuesta. Una experiencia muy decepcionante." },
-  { "kind": "posts", "text": "Recordatorio: el taller de fotografía comienza el jueves a las 18:00. Trae una cámara o tu teléfono y llega diez minutos antes para registrarte." },
-  { "kind": "posts", "text": "Loved today's community cleanup! We collected bags of waste, met new neighbors and left the park looking beautiful. Small actions really can make a difference." },
-  { "kind": "ideas", "text": "Podríamos convertir los espacios vacíos de la oficina en pequeñas zonas de lectura. Cada persona compartiría un libro al mes y una nota sobre lo que aprendió. El objetivo sería encontrar nuevas ideas sin añadir más reuniones." },
-  { "kind": "ideas", "text": "Trabajar sin pausas no siempre significa avanzar más. Cuando las tareas se acumulan, conviene distinguir lo urgente de lo importante y reservar tiempo para concentrarse en una sola actividad." },
-  { "kind": "ideas", "text": "Una aplicación para intercambiar herramientas entre vecinos podría reducir compras innecesarias. Tendría un catálogo por zona, un calendario de préstamos y acuerdos claros sobre el cuidado de cada objeto." },
-  { "kind": "ideas", "text": "El proyecto perdió dirección porque cada semana cambiaban las prioridades. El equipo terminó agotado y dejó pendientes las funciones más importantes. Antes de continuar necesita objetivos claros y responsabilidades bien definidas." },
-  { "kind": "places", "text": "En este relato ficticio, una viajera recorre Oaxaca entre mercados, jardines y talleres de artesanía. Lo que más disfruta es conversar con quienes explican sus técnicas y probar nuevos sabores sin prisa." },
-  { "kind": "places", "text": "El parque de la colonia tiene una pista para caminar, una zona de juegos y varias bancas a la sombra. Las entradas se encuentran en los extremos norte y sur. Los fines de semana recibe más visitantes." },
-  { "kind": "places", "text": "Nuestra visita al mirador fue frustrante: el sendero estaba lleno de basura y la señalización era confusa. El paisaje era hermoso, pero la falta de mantenimiento hizo difícil disfrutar el paseo." },
-  { "kind": "places", "text": "A quiet coastal village became the highlight of our fictional trip. We walked along the beach at sunrise, visited a small museum and enjoyed the peaceful atmosphere. It was a welcome break from the noise of the city." }
+  {
+    "kind": "articles",
+    "text": "Un equipo universitario presentó un sistema de riego que mide la humedad del suelo y solo activa el agua cuando es necesario. Durante una prueba piloto, las plantas se mantuvieron saludables y el consumo de agua disminuyó. El proyecto todavía debe evaluarse durante una temporada completa.",
+    "analysis": { "summary": "Un equipo universitario probó un sistema de riego que utiliza la humedad del suelo para reducir el consumo de agua. Aunque el piloto fue favorable, aún necesita una evaluación más prolongada.", "sentiment": "positive", "language": "es", "keywords": ["sistema de riego", "humedad", "consumo de agua", "prueba piloto"], "category": "ciencia" }
+  },
+  {
+    "kind": "articles",
+    "text": "La biblioteca del barrio ampliará su horario los sábados y organizará talleres gratuitos de lectura. La iniciativa busca que más familias encuentren un espacio para aprender y compartir historias. Los vecinos recibieron la noticia con entusiasmo.",
+    "analysis": { "summary": "La biblioteca ampliará su horario y ofrecerá talleres gratuitos para acercar la lectura a más familias. La comunidad recibió la iniciativa de manera favorable.", "sentiment": "positive", "language": "es", "keywords": ["biblioteca", "talleres de lectura", "familias", "comunidad"], "category": "entretenimiento" }
+  },
+  {
+    "kind": "articles",
+    "text": "Las fuertes lluvias provocaron daños en varios caminos rurales y retrasaron el transporte de alimentos. Comerciantes locales reportaron pérdidas y pidieron acelerar las reparaciones. Las autoridades aún no han confirmado una fecha de reapertura.",
+    "analysis": { "summary": "Las lluvias dañaron caminos rurales, afectaron el transporte de alimentos y generaron pérdidas para comerciantes. Todavía no existe una fecha confirmada para la reapertura.", "sentiment": "negative", "language": "es", "keywords": ["lluvias", "caminos rurales", "transporte", "pérdidas"], "category": "otro" }
+  },
+  {
+    "kind": "articles",
+    "text": "Researchers are comparing two methods of storing solar energy. The first uses batteries, while the second stores heat in insulated tanks. Their report describes the equipment and testing process without declaring a final winner.",
+    "analysis": { "summary": "Un grupo de investigación compara el almacenamiento de energía solar mediante baterías y tanques térmicos. El informe describe las pruebas, pero no establece todavía un método ganador.", "sentiment": "neutral", "language": "en", "keywords": ["solar energy", "batteries", "heat storage", "testing"], "category": "ciencia" }
+  },
+  {
+    "kind": "posts",
+    "text": "¡Por fin terminé mi primer proyecto de programación! Hubo muchos errores en el camino, pero ver la aplicación funcionando hizo que todo valiera la pena. Gracias a quienes me ayudaron a no rendirme.",
+    "analysis": { "summary": "La persona celebra haber terminado su primer proyecto de programación después de superar varios errores y agradece el apoyo recibido.", "sentiment": "positive", "language": "es", "keywords": ["programación", "proyecto", "aplicación", "aprendizaje"], "category": "tecnología" }
+  },
+  {
+    "kind": "posts",
+    "text": "Mi pedido llegó tarde, incompleto y con el empaque roto. Ya escribí a soporte dos veces y sigo sin respuesta. Una experiencia muy decepcionante.",
+    "analysis": { "summary": "La persona reporta un pedido tardío, incompleto y dañado, además de no haber recibido respuesta del área de soporte.", "sentiment": "negative", "language": "es", "keywords": ["pedido", "empaque roto", "soporte", "reclamo"], "category": "negocios" }
+  },
+  {
+    "kind": "posts",
+    "text": "Recordatorio: el taller de fotografía comienza el jueves a las 18:00. Trae una cámara o tu teléfono y llega diez minutos antes para registrarte.",
+    "analysis": { "summary": "El mensaje recuerda el horario de un taller de fotografía y solicita llevar una cámara o teléfono y llegar con anticipación.", "sentiment": "neutral", "language": "es", "keywords": ["taller", "fotografía", "horario", "registro"], "category": "entretenimiento" }
+  },
+  {
+    "kind": "posts",
+    "text": "Loved today's community cleanup! We collected bags of waste, met new neighbors and left the park looking beautiful. Small actions really can make a difference.",
+    "analysis": { "summary": "La publicación celebra una jornada de limpieza comunitaria en la que se recogieron residuos, se conocieron nuevos vecinos y se mejoró el parque.", "sentiment": "positive", "language": "en", "keywords": ["community cleanup", "waste", "neighbors", "park"], "category": "otro" }
+  },
+  {
+    "kind": "ideas",
+    "text": "Podríamos convertir los espacios vacíos de la oficina en pequeñas zonas de lectura. Cada persona compartiría un libro al mes y una nota sobre lo que aprendió. El objetivo sería encontrar nuevas ideas sin añadir más reuniones.",
+    "analysis": { "summary": "La propuesta plantea crear zonas de lectura en la oficina para compartir libros y aprendizajes sin aumentar la cantidad de reuniones.", "sentiment": "positive", "language": "es", "keywords": ["zonas de lectura", "oficina", "libros", "aprendizaje"], "category": "otro" }
+  },
+  {
+    "kind": "ideas",
+    "text": "Trabajar sin pausas no siempre significa avanzar más. Cuando las tareas se acumulan, conviene distinguir lo urgente de lo importante y reservar tiempo para concentrarse en una sola actividad.",
+    "analysis": { "summary": "El texto recomienda priorizar tareas y reservar periodos de concentración, en lugar de trabajar continuamente sin pausas.", "sentiment": "neutral", "language": "es", "keywords": ["prioridades", "tareas", "concentración", "pausas"], "category": "negocios" }
+  },
+  {
+    "kind": "ideas",
+    "text": "Una aplicación para intercambiar herramientas entre vecinos podría reducir compras innecesarias. Tendría un catálogo por zona, un calendario de préstamos y acuerdos claros sobre el cuidado de cada objeto.",
+    "analysis": { "summary": "La idea propone una aplicación vecinal para prestar herramientas mediante un catálogo, calendario y acuerdos de cuidado compartido.", "sentiment": "positive", "language": "es", "keywords": ["aplicación", "herramientas", "préstamos", "vecinos"], "category": "tecnología" }
+  },
+  {
+    "kind": "ideas",
+    "text": "El proyecto perdió dirección porque cada semana cambiaban las prioridades. El equipo terminó agotado y dejó pendientes las funciones más importantes. Antes de continuar necesita objetivos claros y responsabilidades bien definidas.",
+    "analysis": { "summary": "Los cambios constantes de prioridad agotaron al equipo y dejaron funciones importantes sin terminar. El proyecto necesita objetivos y responsabilidades claras.", "sentiment": "negative", "language": "es", "keywords": ["prioridades", "equipo", "objetivos", "responsabilidades"], "category": "negocios" }
+  },
+  {
+    "kind": "places",
+    "text": "En este relato ficticio, una viajera recorre Oaxaca entre mercados, jardines y talleres de artesanía. Lo que más disfruta es conversar con quienes explican sus técnicas y probar nuevos sabores sin prisa.",
+    "analysis": { "summary": "Un relato ficticio describe un recorrido tranquilo por Oaxaca centrado en mercados, artesanía, conversaciones y gastronomía local.", "sentiment": "positive", "language": "es", "keywords": ["Oaxaca", "mercados", "artesanía", "gastronomía"], "category": "entretenimiento" }
+  },
+  {
+    "kind": "places",
+    "text": "El parque de la colonia tiene una pista para caminar, una zona de juegos y varias bancas a la sombra. Las entradas se encuentran en los extremos norte y sur. Los fines de semana recibe más visitantes.",
+    "analysis": { "summary": "El parque cuenta con pista, juegos, bancas y accesos al norte y al sur. La afluencia aumenta durante los fines de semana.", "sentiment": "neutral", "language": "es", "keywords": ["parque", "pista", "zona de juegos", "visitantes"], "category": "otro" }
+  },
+  {
+    "kind": "places",
+    "text": "Nuestra visita al mirador fue frustrante: el sendero estaba lleno de basura y la señalización era confusa. El paisaje era hermoso, pero la falta de mantenimiento hizo difícil disfrutar el paseo.",
+    "analysis": { "summary": "La visita al mirador resultó negativa por la basura, la señalización confusa y la falta de mantenimiento, a pesar de la calidad del paisaje.", "sentiment": "negative", "language": "es", "keywords": ["mirador", "basura", "señalización", "mantenimiento"], "category": "otro" }
+  },
+  {
+    "kind": "places",
+    "text": "A quiet coastal village became the highlight of our fictional trip. We walked along the beach at sunrise, visited a small museum and enjoyed the peaceful atmosphere. It was a welcome break from the noise of the city.",
+    "analysis": { "summary": "El relato ficticio destaca un pueblo costero por su playa al amanecer, un museo pequeño y un ambiente tranquilo alejado del ruido urbano.", "sentiment": "positive", "language": "en", "keywords": ["coastal village", "beach", "museum", "peaceful atmosphere"], "category": "entretenimiento" }
+  }
 ]

@@ -1,7 +1,7 @@
 <script>
   import Icon from './Icon.svelte';
 
-  let { items = [] } = $props();
+  let { items = [], demoMode = false } = $props();
   let visibleCount = $state(10);
   const visibleItems = $derived(items.slice(0, visibleCount));
   const hasMore = $derived(visibleCount < items.length);
@@ -34,7 +34,7 @@
 
 <section class="data-view" aria-labelledby="history-title">
   <header class="view-header"><div><div class="eyebrow"><span></span> TUS IDEAS, CON CONTEXTO</div><h1 class="view-title" id="history-title">Historial<span>↗</span></h1><p>Vuelve a lo esencial de tus últimos análisis.</p></div></header>
-  <p class="session-note">Hasta 500 resultados guardados solo en este navegador. El texto original no se conserva.</p>
+  <p class="session-note">{demoMode ? 'La consulta de ejemplo y su respuesta mock se guardan solo en este navegador.' : 'Hasta 500 resultados guardados solo en este navegador. El texto original no se conserva.'}</p>
   {#if !items.length}
     <div class="data-empty"><Icon name="history" /><h2>Todo empieza con un texto</h2><p>Los análisis completados aparecerán aquí, del más reciente al más antiguo.</p><a class="primary-link" href="#analyze">Analizar mi primer texto ↗</a></div>
   {:else}
@@ -44,7 +44,7 @@
           <div class="history-meta"><span class="history-number">{String(index + 1).padStart(2, '0')}</span><time datetime={item.analyzedAt}>{formatDate(item.analyzedAt)}</time><span class="sentiment {item.sentiment}">{sentiments[item.sentiment].symbol} {sentiments[item.sentiment].label}</span></div>
           <p class="history-summary">{item.summary}</p>
           <div class="history-tags"><span class="category {categoryClass(item.category)}">{item.category}</span><span class="language">{languageName(item.language)}</span></div>
-          <details><summary>Ver palabras clave</summary><div class="tags">{#each item.keywords as keyword}<span>{keyword}</span>{/each}</div></details>
+          <details><summary>{item.sourceText ? 'Ver consulta y palabras clave' : 'Ver palabras clave'}</summary>{#if item.sourceText}<p class="saved-query">{item.sourceText}</p>{/if}<div class="tags">{#each item.keywords as keyword}<span>{keyword}</span>{/each}</div></details>
         </article>
       {/each}
     </div>

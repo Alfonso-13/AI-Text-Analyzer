@@ -33,7 +33,6 @@
 </script>
 
 <section class="info-view" aria-labelledby="info-title">
-  {#if demoMode}<aside class="demo-info-note"><strong>Estás recorriendo una simulación local.</strong><span>El diagrama explica la arquitectura de la versión completa; esta publicación sustituye API y Gemini por reglas ejecutadas en tu navegador.</span></aside>{/if}
   <header class="info-hero">
     <div>
       <div class="eyebrow"><span></span> DEL TEXTO A LO ESENCIAL</div>
@@ -71,7 +70,7 @@
 
   <aside class="info-callout">
     <div class="callout-symbol">◇</div>
-    <div><strong>La key se queda en el servidor.</strong><p>El navegador habla con Texta; Texta habla con Gemini. El resultado regresa validado antes de mostrarse.</p></div>
-    <a href="#analyze">Probar el analizador <span>↗</span></a>
+    <div><strong>{demoMode ? 'Esta publicación usa respuestas mock.' : 'La key se queda en el servidor.'}</strong><p>{demoMode ? 'El diagrama explica el modo productivo. Aquí eliges un ejemplo, se simula la consulta y se devuelve su respuesta de prueba sin llamar a Gemini.' : 'El navegador habla con Texta; Texta habla con Gemini. El resultado regresa validado antes de mostrarse.'}</p></div>
+    <a href="#analyze">{demoMode ? 'Probar los ejemplos' : 'Probar el analizador'} <span>↗</span></a>
   </aside>
 </section>

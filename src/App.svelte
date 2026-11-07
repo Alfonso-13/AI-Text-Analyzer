@@ -51,7 +51,7 @@
     Swal.fire({
       title: 'Del texto a lo esencial',
       text: demoMode
-        ? 'Esta publicación es una demo estática. Simula el recorrido y genera una vista local con reglas sencillas; no usa Gemini, no necesita API key y no envía tu texto fuera del navegador.'
+        ? 'Esta publicación conserva la interfaz de Texta, pero solo permite seleccionar ejemplos precargados. Cada ejemplo devuelve una respuesta mock relacionada después de simular la consulta; no usa Gemini ni envía datos fuera del navegador.'
         : 'Gemini resume y clasifica tu texto; puede equivocarse y no verifica hechos. El texto se envía a Google. Solo el resultado se conserva en el almacenamiento local de este navegador, hasta 500 análisis. No se comparte con otros visitantes ni se guarda en el servidor.',
       icon: 'info',
       confirmButtonText: 'Entendido',
@@ -93,7 +93,7 @@
     <header class="topbar">
       <a class="wordmark" href="#analyze">texta<span class="wordmark-star" aria-hidden="true">✳</span></a>
       <div class="topbar-right">
-        {#if loading}<span class="global-loading" role="status"><span class="spinner"></span> {demoMode ? 'Simulando flujo…' : 'Analizando texto…'}</span>{:else if demoMode}<span class="demo-mode-label"><span>◇</span> Demo sin IA</span>{:else}<span class="powered"><span class="gemini-star">✦</span> Powered by Gemini</span>{/if}
+        {#if loading}<span class="global-loading" role="status"><span class="spinner"></span> {demoMode ? 'Simulación de consulta…' : 'Analizando texto…'}</span>{:else if demoMode}<span class="demo-mode-label"><span>◇</span> Demo con mocks</span>{:else}<span class="powered"><span class="gemini-star">✦</span> Powered by Gemini</span>{/if}
         <button class="theme-button" onclick={toggleTheme} aria-label={theme === 'dark' ? 'Activar tema claro' : 'Activar tema oscuro'} title={theme === 'dark' ? 'Tema claro' : 'Tema oscuro'}><Icon name={theme === 'dark' ? 'sun' : 'moon'} /></button>
         <button class="help-button" onclick={info}>Cómo funciona <span>↗</span></button>
       </div>
@@ -102,13 +102,13 @@
       {#if view === 'analyze'}
         <AnalyzerView {demoMode} onSaved={saveAnalysis} onLoadingChange={value => loading = value} />
       {:else if view === 'history'}
-        <HistoryView items={historyItems} />
+        <HistoryView items={historyItems} {demoMode} />
       {:else if view === 'summary'}
         <SummaryView items={historyItems} />
       {:else}
         <InfoView {demoMode} />
       {/if}
     </main>
-    <footer class="site-footer"><span>texta<span class="footer-star">✳</span> <span class="footer-divider">/</span> Hecho para entender.</span><span>{demoMode ? 'Demo local · Sin datos enviados.' : 'Inteligencia artificial, claridad humana.'}</span></footer>
+    <footer class="site-footer"><span>texta<span class="footer-star">✳</span> <span class="footer-divider">/</span> Hecho para entender.</span><span>{demoMode ? 'Demo con datos de prueba · Sin datos enviados.' : 'Inteligencia artificial, claridad humana.'}</span></footer>
   </div>
 </div>

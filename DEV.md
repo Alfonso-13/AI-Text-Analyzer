@@ -18,9 +18,9 @@ El build admite dos recorridos desde el mismo código:
 ```mermaid
 flowchart LR
   Production[production] --> API[Express + Gemini]
-  Demo[demo] --> Simulator[Simulador local]
+  Demo[demo] --> Mocks[Ejemplos y respuestas mock]
   API --> Result[Resultado validado]
-  Simulator --> Result
+  Mocks --> Result
   Result --> Storage[(localStorage)]
 ```
 
@@ -52,7 +52,7 @@ La key se lee en `server/index.js` y se envía a Google en el header `x-goog-api
 | `base` | `/` | `/AI-Text-Analyzer/` |
 | `siteUrl` | vacío o definido por `SITE_URL` | `https://alfonso-13.github.io` |
 
-No contiene secretos. `mode: demo` reemplaza la llamada a `/api/analyze` por una respuesta local simulada y cambia los avisos de la interfaz para evitar presentarla como IA real.
+No contiene secretos. `mode: demo` desactiva el editor libre y reemplaza la llamada a `/api/analyze` por la respuesta mock asociada al ejemplo seleccionado. También cambia los avisos de la interfaz para evitar presentarla como IA real.
 
 ## Comandos
 
@@ -90,9 +90,9 @@ npm run verify          # check + test + build + auditoría
 
 ### Demo estática de GitHub Pages
 
-La aplicación soporta `production` y `demo` desde el mismo código. `app.config.json` selecciona el modo, la ruta base y el origen público; `main` conserva `production` como valor predeterminado. En `demo`, la llamada a Gemini se sustituye por una simulación local identificada claramente en la interfaz y el texto no sale del navegador.
+La aplicación soporta `production` y `demo` desde el mismo código. `app.config.json` selecciona el modo, la ruta base y el origen público; `main` conserva `production` como valor predeterminado. En `demo`, el usuario solo puede seleccionar ejemplos ficticios precargados. Después de una espera de 1.4 segundos, el navegador devuelve la respuesta mock exacta asociada al ejemplo; no ejecuta heurísticas ni llama a Gemini.
 
-La rama `demo/github-pages` cambia únicamente esa configuración a `demo` y añade `pages-demo.yml`, que valida, compila y publica `dist/`. En GitHub se debe seleccionar **GitHub Actions** como fuente de Pages; no es necesario rastrear archivos compilados ni configurar secretos.
+La rama `demo/github-pages` mantiene la configuración pública del demo (`mode`, `base` y `siteUrl`). `npm run build` genera `dist/`, y esos archivos compilados se publican en la raíz de la rama `gh-pages`. En **Settings > Pages** la fuente debe ser **Deploy from a branch**, rama `gh-pages`, carpeta `/(root)`; nunca debe apuntar a la raíz de `demo/github-pages`, porque allí viven los archivos fuente de Vite.
 
 Para revisar la publicación localmente desde esa rama:
 
@@ -102,7 +102,7 @@ npm run build
 npx vite preview --host 127.0.0.1
 ```
 
-La demo conserva resultados simulados en `localStorage` para que Historial y Resumen sean navegables. No guarda el texto original, no consume cuota y no debe utilizarse para evaluar la calidad de un análisis de IA.
+La demo guarda en `localStorage` el ejemplo consultado y su respuesta mock para que Historial y Resumen sean navegables. No consume cuota y no debe utilizarse para evaluar la calidad de un análisis de IA. Este comportamiento es exclusivo del modo demo; en producción el historial conserva solo el resultado validado y no el texto original.
 
 ## Contrato de análisis
 
@@ -138,7 +138,7 @@ El servidor expone además `GET /api/health`. El historial y el resumen no son e
 - El historial no contiene el texto original, no cruza navegadores y se pierde al borrar los datos del sitio.
 - Las salidas se renderizan como texto, nunca como HTML interpretado.
 
-En modo `demo`, el texto no se envía al backend ni a Google. El navegador genera una respuesta de muestra mediante reglas sencillas y guarda únicamente ese resultado simulado en el mismo historial local.
+En modo `demo`, no se acepta texto libre ni se envían solicitudes al backend o a Google. Cada ejemplo precargado tiene una respuesta mock explícita. El navegador simula la espera de consulta y guarda localmente tanto el ejemplo elegido como su respuesta, identificados como datos de demostración.
 
 ## Resiliencia y seguridad
 

@@ -10,12 +10,12 @@ Nació como proyecto de aprendizaje y portafolio para demostrar una integración
 
 [Abrir Texta Demo en GitHub Pages](https://alfonso-13.github.io/AI-Text-Analyzer/)
 
-La publicación permite recorrer el analizador, la carga, el resultado, el historial y el resumen sin configurar una API key. Utiliza datos de prueba y reglas locales para simular la respuesta; **no usa Gemini, no realiza un análisis real y no envía el texto fuera del navegador**.
+La publicación conserva la interfaz y permite recorrer el analizador, la carga, el resultado, el historial y el resumen sin configurar una API key. El editor libre permanece desactivado: se elige uno de los ejemplos ficticios y, después de una espera breve, se muestra la respuesta mock asociada. **No usa Gemini, no realiza un análisis real y no envía información fuera del navegador**.
 
 | Modo | Propósito | Procesamiento |
 | --- | --- | --- |
 | `production` | Ejecutar la aplicación completa localmente | Express + Google Gemini |
-| `demo` | Mostrar el flujo públicamente y sin credenciales | Simulación local en el navegador |
+| `demo` | Mostrar el flujo públicamente y sin credenciales | Ejemplos y respuestas mock en el navegador |
 
 ## Qué demuestra
 
@@ -69,7 +69,7 @@ Para validar el proyecto completo:
 .\run-local.ps1 -Verify
 ```
 
-El modo se selecciona mediante [app.config.json](app.config.json). La rama `main` usa `production`; la rama `demo/github-pages` cambia únicamente la configuración de ejecución y añade el workflow de Pages.
+El modo se selecciona mediante [app.config.json](app.config.json). La rama `main` usa `production`; `demo/github-pages` activa los mocks y la ruta pública. El build estático compilado se publica desde la raíz de `gh-pages`.
 
 ## Alcance
 

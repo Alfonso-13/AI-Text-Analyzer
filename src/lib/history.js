@@ -1,7 +1,12 @@
-import { analysisResponseSchema } from '../../shared/analysis.js';
+import { z } from 'zod';
+import { analysisResponseSchema, MAX_TEXT_LENGTH } from '../../shared/analysis.js';
 
 export const HISTORY_STORAGE_KEY = 'texta.analysis-history.v1';
 export const HISTORY_LIMIT = 500;
+const historyRecordSchema = analysisResponseSchema.extend({
+  sourceText: z.string().max(MAX_TEXT_LENGTH).optional(),
+  simulated: z.boolean().optional(),
+}).strict();
 
 export function readHistory(storage) {
   if (!storage) return [];
@@ -11,7 +16,7 @@ export function readHistory(storage) {
     if (!Array.isArray(parsed)) return [];
     // localStorage is user-controlled; discard malformed or obsolete records on every read.
     return parsed
-      .map(item => analysisResponseSchema.safeParse(item))
+      .map(item => historyRecordSchema.safeParse(item))
       .filter(result => result.success)
       .map(result => result.data)
       .slice(0, HISTORY_LIMIT);
@@ -21,8 +26,8 @@ export function readHistory(storage) {
 }
 
 export function addToHistory(storage, record) {
-  const validRecord = analysisResponseSchema.parse(record);
-  // Keep the newest validated results only; raw input text is intentionally never persisted.
+  const validRecord = historyRecordSchema.parse(record);
+  // Production records contain only the result; demo records may also include their predefined sample text.
   const next = [validRecord, ...readHistory(storage)].slice(0, HISTORY_LIMIT);
   storage?.setItem(HISTORY_STORAGE_KEY, JSON.stringify(next));
   return next;
