@@ -1,4 +1,5 @@
 <script>
+  let { demoMode = false } = $props();
   const steps = [
     {
       number: '01',
@@ -32,6 +33,7 @@
 </script>
 
 <section class="info-view" aria-labelledby="info-title">
+  {#if demoMode}<aside class="demo-info-note"><strong>Estás recorriendo una simulación local.</strong><span>El diagrama explica la arquitectura de la versión completa; esta publicación sustituye API y Gemini por reglas ejecutadas en tu navegador.</span></aside>{/if}
   <header class="info-hero">
     <div>
       <div class="eyebrow"><span></span> DEL TEXTO A LO ESENCIAL</div>

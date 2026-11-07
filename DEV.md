@@ -57,7 +57,7 @@ Comandos npm equivalentes:
 
 ```powershell
 npm run dev             # Vite + Express en desarrollo
-npm run build           # compila el frontend
+npm run build           # compila el modo definido en app.config.json
 npm start               # sirve dist y API desde Express
 npm run check           # diagnósticos Svelte
 npm test                # pruebas sin llamadas externas
@@ -66,6 +66,12 @@ npm run verify          # check + test + build + auditoría
 ```
 
 `run-local.ps1` ofrece los modos equivalentes normal, `-Production` y `-Verify`. Los procesos se enlazan únicamente a loopback.
+
+### Demo estática de GitHub Pages
+
+La aplicación soporta `production` y `demo` desde el mismo código. `app.config.json` selecciona el modo, la ruta base y el origen público; `main` conserva `production` como valor predeterminado. En `demo`, la llamada a Gemini se sustituye por una simulación local identificada claramente en la interfaz y el texto no sale del navegador.
+
+La rama `demo/github-pages` cambia únicamente esa configuración a `demo` y añade `pages-demo.yml`, que valida, compila y publica `dist/`. En GitHub se debe seleccionar **GitHub Actions** como fuente de Pages; no es necesario rastrear archivos compilados ni configurar secretos.
 
 ## Contrato de análisis
 

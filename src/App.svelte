@@ -15,6 +15,7 @@
     { id: 'info', label: 'Información', icon: 'info' },
   ];
   const THEME_STORAGE_KEY = 'texta.theme';
+  const demoMode = import.meta.env.VITE_APP_MODE === 'demo';
   let view = $state('analyze');
   let historyItems = $state([]);
   let loading = $state(false);
@@ -49,7 +50,9 @@
   function info() {
     Swal.fire({
       title: 'Del texto a lo esencial',
-      text: 'Gemini resume y clasifica tu texto; puede equivocarse y no verifica hechos. El texto se envía a Google. Solo el resultado se conserva en el almacenamiento local de este navegador, hasta 500 análisis. No se comparte con otros visitantes ni se guarda en el servidor.',
+      text: demoMode
+        ? 'Esta publicación es una demo estática. Simula el recorrido y genera una vista local con reglas sencillas; no usa Gemini, no necesita API key y no envía tu texto fuera del navegador.'
+        : 'Gemini resume y clasifica tu texto; puede equivocarse y no verifica hechos. El texto se envía a Google. Solo el resultado se conserva en el almacenamiento local de este navegador, hasta 500 análisis. No se comparte con otros visitantes ni se guarda en el servidor.',
       icon: 'info',
       confirmButtonText: 'Entendido',
       confirmButtonColor: '#171918',
@@ -74,7 +77,7 @@
   });
 </script>
 
-<svelte:head><title>{view === 'history' ? 'Historial de análisis | Texta' : view === 'summary' ? 'Resumen por categoría | Texta' : view === 'info' ? 'Cómo funciona | Texta' : 'Texta | Analizador de texto con IA: resumen y sentimiento'}</title></svelte:head>
+<svelte:head><title>{demoMode ? 'Texta | Demo interactiva sin IA' : view === 'history' ? 'Historial de análisis | Texta' : view === 'summary' ? 'Resumen por categoría | Texta' : view === 'info' ? 'Cómo funciona | Texta' : 'Texta | Analizador de texto con IA: resumen y sentimiento'}</title></svelte:head>
 
 <div class="app-shell">
   <aside class="rail" aria-label="Identidad de la aplicación">
@@ -90,22 +93,22 @@
     <header class="topbar">
       <a class="wordmark" href="#analyze">texta<span class="wordmark-star" aria-hidden="true">✳</span></a>
       <div class="topbar-right">
-        {#if loading}<span class="global-loading" role="status"><span class="spinner"></span> Analizando texto…</span>{:else}<span class="powered"><span class="gemini-star">✦</span> Powered by Gemini</span>{/if}
+        {#if loading}<span class="global-loading" role="status"><span class="spinner"></span> {demoMode ? 'Simulando flujo…' : 'Analizando texto…'}</span>{:else if demoMode}<span class="demo-mode-label"><span>◇</span> Demo sin IA</span>{:else}<span class="powered"><span class="gemini-star">✦</span> Powered by Gemini</span>{/if}
         <button class="theme-button" onclick={toggleTheme} aria-label={theme === 'dark' ? 'Activar tema claro' : 'Activar tema oscuro'} title={theme === 'dark' ? 'Tema claro' : 'Tema oscuro'}><Icon name={theme === 'dark' ? 'sun' : 'moon'} /></button>
         <button class="help-button" onclick={info}>Cómo funciona <span>↗</span></button>
       </div>
     </header>
     <main id="main">
       {#if view === 'analyze'}
-        <AnalyzerView onSaved={saveAnalysis} onLoadingChange={value => loading = value} />
+        <AnalyzerView {demoMode} onSaved={saveAnalysis} onLoadingChange={value => loading = value} />
       {:else if view === 'history'}
         <HistoryView items={historyItems} />
       {:else if view === 'summary'}
         <SummaryView items={historyItems} />
       {:else}
-        <InfoView />
+        <InfoView {demoMode} />
       {/if}
     </main>
-    <footer class="site-footer"><span>texta<span class="footer-star">✳</span> <span class="footer-divider">/</span> Hecho para entender.</span><span>Inteligencia artificial, claridad humana.</span></footer>
+    <footer class="site-footer"><span>texta<span class="footer-star">✳</span> <span class="footer-divider">/</span> Hecho para entender.</span><span>{demoMode ? 'Demo local · Sin datos enviados.' : 'Inteligencia artificial, claridad humana.'}</span></footer>
   </div>
 </div>

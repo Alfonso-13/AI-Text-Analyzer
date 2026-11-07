@@ -1,0 +1,14 @@
+{
+  "name": "Texta — Demo interactiva sin IA",
+  "short_name": "Texta Demo",
+  "description": "Simula localmente el flujo visual de Texta sin Gemini, API key ni datos enviados.",
+  "lang": "es-MX",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#e30613",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
