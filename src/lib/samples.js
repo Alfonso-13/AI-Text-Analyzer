@@ -1,10 +1,10 @@
 import samples from '../data/sample-texts.json' with { type: 'json' };
 
 export const sampleKinds = [
-  { id: 'articles', label: 'Artículos y noticias' },
-  { id: 'posts', label: 'Posts y tweets' },
-  { id: 'ideas', label: 'Ideas y párrafos' },
-  { id: 'places', label: 'Lugares' },
+  { id: 'articles' },
+  { id: 'posts' },
+  { id: 'ideas' },
+  { id: 'places' },
 ];
 
 export function pickSample(kind = 'all', currentText = '', random = Math.random) {

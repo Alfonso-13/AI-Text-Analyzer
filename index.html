@@ -1,50 +1,60 @@
 <!doctype html>
-<html lang="es-MX">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#e30613" />
     <meta name="color-scheme" content="light" />
-    <title>Texta | Analizador de texto con IA: resumen y sentimiento</title>
-    <meta name="description" content="Convierte artículos, posts e ideas en claridad con Texta. Obtén resumen, sentimiento, idioma, palabras clave y categoría con inteligencia artificial." />
+    <title>Texta | AI text analyzer: summary and sentiment</title>
+    <meta name="description" content="Turn articles, posts, and ideas into clarity with Texta. Get a Spanish summary, sentiment, detected language, keywords, and category through AI." />
     <meta name="application-name" content="Texta" />
     <meta name="robots" content="index, follow" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Texta" />
-    <meta property="og:locale" content="es_MX" />
-    <meta property="og:title" content="Texta | Mucho texto. Todo claro." />
-    <meta property="og:description" content="Resume y analiza el sentimiento, idioma, palabras clave y categoría de tus textos con IA." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Texta | Much text. All clear." />
+    <meta property="og:description" content="Summarize and analyze sentiment, language, keywords, and category with AI." />
     <meta property="og:image" content="/social-card.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:alt" content="Texta: Mucho texto. Todo claro. Identidad roja, blanca y negra." />
+    <meta property="og:image:alt" content="Texta: Much text. All clear. Red, white, and black identity." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Texta | Analizador de texto con IA" />
-    <meta name="twitter:description" content="Del texto a lo esencial: resumen, sentimiento, idioma y palabras clave." />
+    <meta name="twitter:title" content="Texta | AI text analyzer" />
+    <meta name="twitter:description" content="From text to essentials: summary, sentiment, language, and keywords." />
     <meta name="twitter:image" content="/social-card.png" />
-    <meta name="twitter:image:alt" content="Texta: Mucho texto. Todo claro." />
+    <meta name="twitter:image:alt" content="Texta: Much text. All clear." />
     <link rel="icon" href="/favicon.ico" sizes="64x64" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
+    <div id="site-intro" class="site-intro" aria-hidden="true">
+      <div class="site-intro-grid"></div>
+      <div class="site-intro-accent"></div>
+      <div class="site-intro-content">
+        <div class="site-intro-mark"><span>t</span><i>✳</i></div>
+        <div class="site-intro-wordmark"><strong>texta</strong><small>MUCH TEXT. ALL CLEAR.</small></div>
+        <div class="site-intro-product"><span></span><p>AI TEXT ANALYZER</p><span></span></div>
+      </div>
+    </div>
     <div id="app">
       <main class="presentation-fallback">
-        <h1>Texta: analizador de texto con inteligencia artificial</h1>
-        <p>Mucho texto. Todo claro. Encuentra lo esencial de artículos, posts e ideas con Google Gemini.</p>
+        <h1>Texta: artificial intelligence text analyzer</h1>
+        <p>Much text. All clear. Find the essentials in articles, posts, and ideas with Google Gemini.</p>
         <ul>
-          <li>Obtén un resumen en español y detecta el sentimiento del contenido.</li>
-          <li>Identifica el idioma, las palabras clave y la categoría del texto.</li>
-          <li>Consulta el historial y el resumen de categorías de la sesión.</li>
-          <li>Prueba ejemplos precargados antes de analizar tus propios textos.</li>
+          <li>Get a Spanish summary and detect content sentiment.</li>
+          <li>Identify language, keywords, and text category.</li>
+          <li>Review browser-local history and category summaries.</li>
+          <li>Try predefined examples before analyzing your own text.</li>
         </ul>
-        <p>Texta necesita JavaScript para mostrar el analizador o su demostración estática. La versión completa puede enviar texto a Google; el historial permanece en tu navegador.</p>
+        <p>Texta needs JavaScript to display the analyzer or its static demo. The complete version may send text to Google; history remains in your browser.</p>
       </main>
     </div>
-    <noscript>Activa JavaScript para usar el editor y generar análisis con Texta.</noscript>
+    <noscript>Enable JavaScript to use the editor and generate analyses with Texta.</noscript>
+    <script type="module" src="/src/intro.js"></script>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

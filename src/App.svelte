@@ -7,12 +7,13 @@
   import InfoView from './components/InfoView.svelte';
   import SummaryView from './components/SummaryView.svelte';
   import { addToHistory, readHistory } from './lib/history.js';
+  import { DEFAULT_LANGUAGE, LANGUAGE_STORAGE_KEY, normalizeLanguage, translate as t } from './lib/i18n.js';
 
   const menu = [
-    { id: 'analyze', label: 'Analizador', icon: 'analyze' },
-    { id: 'history', label: 'Historial', icon: 'history' },
-    { id: 'summary', label: 'Resumen', icon: 'summary' },
-    { id: 'info', label: 'Información', icon: 'info' },
+    { id: 'analyze', labelKey: 'nav.analyze', icon: 'analyze' },
+    { id: 'history', labelKey: 'nav.history', icon: 'history' },
+    { id: 'summary', labelKey: 'nav.summary', icon: 'summary' },
+    { id: 'info', labelKey: 'nav.info', icon: 'info' },
   ];
   const THEME_STORAGE_KEY = 'texta.theme';
   const demoMode = import.meta.env.VITE_APP_MODE === 'demo';
@@ -20,6 +21,8 @@
   let historyItems = $state([]);
   let loading = $state(false);
   let theme = $state('light');
+  let language = $state(DEFAULT_LANGUAGE);
+  const pageTitle = $derived(t(language, demoMode ? 'title.demo' : view === 'history' ? 'title.history' : view === 'summary' ? 'title.summary' : view === 'info' ? 'title.info' : 'title.analyze'));
 
   function applyTheme(nextTheme) {
     theme = nextTheme;
@@ -33,6 +36,17 @@
     localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
   }
 
+  function applyLanguage(nextLanguage) {
+    language = normalizeLanguage(nextLanguage);
+    document.documentElement.lang = language;
+  }
+
+  function toggleLanguage() {
+    const nextLanguage = language === 'en' ? 'es' : 'en';
+    applyLanguage(nextLanguage);
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+  }
+
   function saveAnalysis(record) {
     try {
       // History is intentionally scoped to this browser; there is no shared server history.
@@ -40,8 +54,9 @@
     } catch {
       Swal.fire({
         icon: 'warning',
-        title: 'Análisis listo, historial no guardado',
-        text: 'El navegador no permitió guardar este resultado localmente.',
+        title: t(language, 'history.warningTitle'),
+        text: t(language, 'history.warningText'),
+        confirmButtonText: t(language, 'modal.confirm'),
         confirmButtonColor: '#171918',
       });
     }
@@ -49,12 +64,10 @@
 
   function info() {
     Swal.fire({
-      title: 'Del texto a lo esencial',
-      text: demoMode
-        ? 'Esta publicación conserva la interfaz de Texta, pero solo permite seleccionar ejemplos precargados. Cada ejemplo devuelve una respuesta mock relacionada después de simular la consulta; no usa Gemini ni envía datos fuera del navegador.'
-        : 'Gemini resume y clasifica tu texto; puede equivocarse y no verifica hechos. El texto se envía a Google. Solo el resultado se conserva en el almacenamiento local de este navegador, hasta 500 análisis. No se comparte con otros visitantes ni se guarda en el servidor.',
+      title: t(language, 'modal.title'),
+      text: t(language, demoMode ? 'modal.demo' : 'modal.production'),
       icon: 'info',
-      confirmButtonText: 'Entendido',
+      confirmButtonText: t(language, 'modal.confirm'),
       confirmButtonColor: '#171918',
     });
   }
@@ -65,6 +78,7 @@
     const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
     const preferredTheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     applyTheme(savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : preferredTheme);
+    applyLanguage(localStorage.getItem(LANGUAGE_STORAGE_KEY));
 
     const syncRoute = () => {
       const route = location.hash.slice(1);
@@ -77,15 +91,15 @@
   });
 </script>
 
-<svelte:head><title>{demoMode ? 'Texta | Demo interactiva sin IA' : view === 'history' ? 'Historial de análisis | Texta' : view === 'summary' ? 'Resumen por categoría | Texta' : view === 'info' ? 'Cómo funciona | Texta' : 'Texta | Analizador de texto con IA: resumen y sentimiento'}</title></svelte:head>
+<svelte:head><title>{pageTitle}</title></svelte:head>
 
 <div class="app-shell">
-  <aside class="rail" aria-label="Identidad de la aplicación">
-    <a href="#analyze" class="logo-symbol" aria-label="Texta, ir al analizador">t<span>✳</span></a>
+  <aside class="rail" aria-label={t(language, 'aria.identity')}>
+    <a href="#analyze" class="logo-symbol" aria-label={t(language, 'aria.home')}>t<span>✳</span></a>
     <div class="rail-line"></div>
-    <nav class="main-nav" aria-label="Menú principal">
+    <nav class="main-nav" aria-label={t(language, 'aria.menu')}>
       {#each menu as item}
-        <a href={'#' + item.id} class:active={view === item.id} aria-current={view === item.id ? 'page' : undefined}><Icon name={item.icon} /><span>{item.label}</span></a>
+        <a href={'#' + item.id} class:active={view === item.id} aria-current={view === item.id ? 'page' : undefined}><Icon name={item.icon} /><span>{t(language, item.labelKey)}</span></a>
       {/each}
     </nav>
   </aside>
@@ -93,22 +107,23 @@
     <header class="topbar">
       <a class="wordmark" href="#analyze">texta<span class="wordmark-star" aria-hidden="true">✳</span></a>
       <div class="topbar-right">
-        {#if loading}<span class="global-loading" role="status"><span class="spinner"></span> {demoMode ? 'Simulación de consulta…' : 'Analizando texto…'}</span>{:else if demoMode}<span class="demo-mode-label"><span>◇</span> Demo con mocks</span>{:else}<span class="powered"><span class="gemini-star">✦</span> Powered by Gemini</span>{/if}
-        <button class="theme-button" onclick={toggleTheme} aria-label={theme === 'dark' ? 'Activar tema claro' : 'Activar tema oscuro'} title={theme === 'dark' ? 'Tema claro' : 'Tema oscuro'}><Icon name={theme === 'dark' ? 'sun' : 'moon'} /></button>
-        <button class="help-button" onclick={info}>Cómo funciona <span>↗</span></button>
+        {#if loading}<span class="global-loading" role="status"><span class="spinner"></span> {t(language, demoMode ? 'loading.demo' : 'loading.analysis')}</span>{:else if demoMode}<span class="demo-mode-label"><span>◇</span> {t(language, 'demo.label')}</span>{:else}<span class="powered"><span class="gemini-star">✦</span> Powered by Gemini</span>{/if}
+        <button class="language-toggle" onclick={toggleLanguage} aria-label={language === 'en' ? 'Switch language to Spanish' : 'Cambiar idioma a inglés'} title={language === 'en' ? 'Español' : 'English'}><span class:active={language === 'en'}>EN</span><i>/</i><span class:active={language === 'es'}>ES</span></button>
+        <button class="theme-button" onclick={toggleTheme} aria-label={t(language, theme === 'dark' ? 'theme.light' : 'theme.dark')} title={t(language, theme === 'dark' ? 'theme.light' : 'theme.dark')}><Icon name={theme === 'dark' ? 'sun' : 'moon'} /></button>
+        <button class="help-button" onclick={info}>{t(language, 'help')} <span>↗</span></button>
       </div>
     </header>
     <main id="main">
       {#if view === 'analyze'}
-        <AnalyzerView {demoMode} onSaved={saveAnalysis} onLoadingChange={value => loading = value} />
+        <AnalyzerView {demoMode} {language} onSaved={saveAnalysis} onLoadingChange={value => loading = value} />
       {:else if view === 'history'}
-        <HistoryView items={historyItems} {demoMode} />
+        <HistoryView items={historyItems} {demoMode} {language} />
       {:else if view === 'summary'}
-        <SummaryView items={historyItems} />
+        <SummaryView items={historyItems} {language} />
       {:else}
-        <InfoView {demoMode} />
+        <InfoView {demoMode} {language} />
       {/if}
     </main>
-    <footer class="site-footer"><span>texta<span class="footer-star">✳</span> <span class="footer-divider">/</span> Hecho para entender.</span><span>{demoMode ? 'Demo con datos de prueba · Sin datos enviados.' : 'Inteligencia artificial, claridad humana.'}</span></footer>
+    <footer class="site-footer"><span>texta<span class="footer-star">✳</span> <span class="footer-divider">/</span> {language === 'en' ? 'Made to understand.' : 'Hecho para entender.'}</span><span>{t(language, demoMode ? 'footer.demo' : 'footer.tagline')}</span></footer>
   </div>
 </div>

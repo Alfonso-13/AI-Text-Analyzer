@@ -1,5 +1,5 @@
 <script>
-  let { title = 'Conectando las ideas…', detail = 'Esto puede tomar unos segundos.', compact = false } = $props();
+  let { title = 'Connecting the ideas…', detail = 'This may take a few seconds.', compact = false } = $props();
 </script>
 
 <div class:compact class="brand-loading" role="status" aria-live="polite">

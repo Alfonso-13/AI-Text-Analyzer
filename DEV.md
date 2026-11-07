@@ -101,6 +101,21 @@ npm run verify:demo     # check + tests + demo build + secret audit
 
 All local processes bind to loopback only.
 
+## Interface language and entrance
+
+The interface defaults to English and exposes an `EN / ES` selector in the header. The selection is stored under `texta.language`, updates the document `lang` attribute, and applies to navigation, dialogs, empty states, history, summary metrics, technical information, dates, sentiments, detected languages, and category labels. AI-generated summaries keep their contract-defined Spanish output.
+
+The initial experience uses a short brand entrance inspired by the presentation patterns in the author's other portfolio projects, adapted to Texta's red, black, and white identity. It:
+
+- runs once per browser tab session using `texta.intro-seen.v1`;
+- can be replayed by adding `?intro` to the URL;
+- removes itself after animation completion with a timeout fallback;
+- never intercepts pointer input;
+- is skipped when `prefers-reduced-motion: reduce` is active;
+- staggers the top bar, navigation, content, and footer into view after the curtain exits.
+
+The decision logic lives in `src/lib/intro.js`, browser orchestration in `src/intro.js`, markup in `index.html`, and visual treatment in `src/theme.css`.
+
 ## Static GitHub Pages demo
 
 Production and demo live in the same source branch. `npm run build:demo` selects the public profile without modifying tracked files.
@@ -194,6 +209,9 @@ These controls are appropriate for local execution. A public service with real a
 - `src/components/InfoView.svelte`: visual explanation and animated analysis flow.
 - `src/data/sample-texts.json`: fictional examples and their explicit demo mocks.
 - `src/lib/demo.js`: exact mock lookup and response validation.
+- `src/lib/i18n.js`: English and Spanish UI copy, locale formatting, and display labels.
+- `src/lib/intro.js`: testable entrance playback policy.
+- `src/intro.js`: session storage, replay query, animation completion, and fallback cleanup.
 - `src/lib/history.js`: validated `localStorage` reads, writes, and limits.
 - `server/`: API, safe errors, and Gemini adapter.
 - `shared/analysis.js`: shared Zod contracts.

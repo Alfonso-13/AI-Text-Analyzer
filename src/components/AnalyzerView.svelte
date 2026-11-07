@@ -5,8 +5,9 @@
   import Icon from './Icon.svelte';
   import { createDemoAnalysis } from '../lib/demo.js';
   import { pickSample, sampleKinds } from '../lib/samples.js';
+  import { categoryName, displayLanguage, formatDate, formatNumber, sentimentName, translate as t } from '../lib/i18n.js';
 
-  let { demoMode = false, onSaved = () => {}, onLoadingChange = () => {} } = $props();
+  let { demoMode = false, language = 'en', onSaved = () => {}, onLoadingChange = () => {} } = $props();
   let text = $state('');
   let loading = $state(false);
   let result = $state(null);
@@ -14,9 +15,9 @@
   let resultPanel = $state();
   const example = 'Apple presentó hoy el iPhone 17 con una cámara revolucionaria de 200MP y un chip A19 que promete el doble de rendimiento. Los analistas esperan que las ventas superen los 100 millones de unidades en el primer trimestre.';
   const sentiments = {
-    positive: { label: 'Positivo', symbol: '↗' },
-    negative: { label: 'Negativo', symbol: '↘' },
-    neutral: { label: 'Neutral', symbol: '→' },
+    positive: { symbol: '↗' },
+    negative: { symbol: '↘' },
+    neutral: { symbol: '→' },
   };
   const categoryClasses = {
     tecnología: 'technology',
@@ -28,19 +29,10 @@
     otro: 'other',
   };
   const words = $derived(text.trim() ? text.trim().split(/\s+/).length : 0);
+  const heroDescription = $derived(t(language, 'hero.description').split('\n'));
+  const heroNote = $derived(t(language, 'hero.note').split('\n'));
+  const emptyTitle = $derived(t(language, 'result.emptyTitle').split('\n'));
   const alert = options => Swal.fire({ confirmButtonColor: '#171918', ...options });
-
-  function formatDate(value) {
-    return new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
-  }
-
-  function languageName(code) {
-    try {
-      return new Intl.DisplayNames(['es'], { type: 'language' }).of(code);
-    } catch {
-      return code;
-    }
-  }
 
   function categoryClass(category) {
     return `category-${categoryClasses[category] || 'other'}`;
@@ -61,12 +53,12 @@
   async function clear() {
     if (!text && !result) return;
     const answer = await alert({
-      title: '¿Empezar de nuevo?',
-      text: 'Se borrarán el texto y el análisis de esta pantalla.',
+      title: t(language, 'alert.clearTitle'),
+      text: t(language, 'alert.clearText'),
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Sí, limpiar',
-      cancelButtonText: 'Cancelar',
+      confirmButtonText: t(language, 'alert.clearConfirm'),
+      cancelButtonText: t(language, 'alert.cancel'),
     });
     if (answer.isConfirmed) setText('');
   }
@@ -75,7 +67,7 @@
     event.preventDefault();
     if (loading) return;
     if (!text.trim() || text.length > MAX_TEXT_LENGTH) {
-      await alert({ title: 'Revisa tu texto', text: 'Ingresa entre 1 y 12,000 caracteres para continuar.', icon: 'info' });
+      await alert({ title: t(language, 'alert.invalidTitle'), text: t(language, 'alert.invalidText'), icon: 'info' });
       return;
     }
 
@@ -97,7 +89,7 @@
           signal: AbortSignal.timeout(35000),
         });
         data = await response.json();
-        if (!response.ok) throw new Error(data.error?.message || 'No fue posible analizar el texto.');
+        if (!response.ok) throw new Error(data.error?.message || t(language, 'alert.requestFailed'));
       }
       // Validate the API boundary again before rendering or saving anything in this browser.
       result = analysisResponseSchema.parse(data);
@@ -105,13 +97,13 @@
       requestAnimationFrame(() => resultPanel?.focus());
     } catch (cause) {
       error = cause.name === 'TimeoutError'
-        ? 'La solicitud tardó demasiado. Intenta de nuevo.'
+        ? t(language, 'error.timeout')
         : cause instanceof TypeError
-          ? 'No hay conexión con el servidor. Comprueba que esté en ejecución.'
+          ? t(language, 'error.connection')
           : cause.name === 'ZodError'
-            ? 'El servidor devolvió un resultado inválido.'
-            : cause.message || 'Ocurrió un error. Intenta de nuevo.';
-      await alert({ icon: 'error', title: 'No pudimos analizarlo', text: error, confirmButtonText: 'Entendido' });
+            ? t(language, 'error.invalidResult')
+            : cause.message || t(language, 'error.generic');
+      await alert({ icon: 'error', title: t(language, 'alert.analysisFailed'), text: error, confirmButtonText: t(language, 'modal.confirm') });
     } finally {
       loading = false;
       onLoadingChange(false);
@@ -121,65 +113,65 @@
   async function copy() {
     try {
       await navigator.clipboard.writeText(JSON.stringify(result, null, 2));
-      await alert({ toast: true, position: 'top-end', icon: 'success', title: 'JSON copiado', showConfirmButton: false, timer: 2000 });
+      await alert({ toast: true, position: 'top-end', icon: 'success', title: t(language, 'alert.copied'), showConfirmButton: false, timer: 2000 });
     } catch {
-      await alert({ icon: 'info', title: 'No se pudo copiar', text: 'Tu navegador no permitió acceder al portapapeles.' });
+      await alert({ icon: 'info', title: t(language, 'alert.copyFailed'), text: t(language, 'alert.copyText') });
     }
   }
 </script>
 
 <section class="intro" aria-labelledby="title">
   <div>
-    <div class="eyebrow"><span></span> MENOS RUIDO. MÁS CONTEXTO.</div>
-    <h1 id="title">Mucho texto.<br /><mark>Todo claro.</mark><span class="period">✳</span></h1>
-    <p>Encuentra lo esencial de cualquier texto.<br class="desktop-break" /> Un resumen, su intención y las palabras que importan.</p>
+    <div class="eyebrow"><span></span> {t(language, 'hero.eyebrow')}</div>
+    <h1 id="title">{t(language, 'hero.line1')}<br /><mark>{t(language, 'hero.line2')}</mark><span class="period">✳</span></h1>
+    <p>{heroDescription[0]}<br class="desktop-break" /> {heroDescription[1]}</p>
   </div>
-  <div class="intro-note"><span class="note-star">✳</span><p>Tu siguiente gran idea<br />empieza por entender.</p><span class="note-arrow">↙</span></div>
+  <div class="intro-note"><span class="note-star">✳</span><p>{heroNote[0]}<br />{heroNote[1]}</p><span class="note-arrow">↙</span></div>
 </section>
 
 <div class="workspace">
   <section class="editor-card" id="editor" aria-labelledby="editor-title">
     <div class="card-heading">
-      <div><span class="step">01</span><h2 id="editor-title">Tu texto, aquí</h2></div>
-      <button class="text-button" onclick={() => demoMode ? loadRandom() : setText(example)} disabled={loading}>Probar un ejemplo <span>↗</span></button>
+      <div><span class="step">01</span><h2 id="editor-title">{t(language, 'editor.title')}</h2></div>
+      <button class="text-button" onclick={() => demoMode ? loadRandom() : setText(example)} disabled={loading}>{t(language, 'editor.example')} <span>↗</span></button>
     </div>
-    <div class="random-toolbar"><button class="random-button" onclick={() => loadRandom()} disabled={loading}><Icon name="shuffle" /> Texto aleatorio</button><span>Ejemplos listos, sin esperas</span></div>
+    <div class="random-toolbar"><button class="random-button" onclick={() => loadRandom()} disabled={loading}><Icon name="shuffle" /> {t(language, 'editor.random')}</button><span>{t(language, 'editor.samplesReady')}</span></div>
     <form onsubmit={analyze}>
-      <label class="sr-only" for="text">Texto para analizar</label>
-      <textarea id="text" bind:value={text} disabled={loading || demoMode} maxlength={MAX_TEXT_LENGTH} placeholder={demoMode ? 'Selecciona uno de los ejemplos disponibles…' : 'Pega ese artículo, tweet o idea que tienes en mente…'} aria-describedby="text-hint text-counter" oninput={() => { result = null; error = ''; }}></textarea>
-      <div class="editor-meta"><span>{words} {words === 1 ? 'palabra' : 'palabras'}</span><span id="text-counter">{text.length.toLocaleString('es-MX')} / 12,000</span></div>
+      <label class="sr-only" for="text">{t(language, 'editor.label')}</label>
+      <textarea id="text" bind:value={text} disabled={loading || demoMode} maxlength={MAX_TEXT_LENGTH} placeholder={t(language, demoMode ? 'editor.demoPlaceholder' : 'editor.placeholder')} aria-describedby="text-hint text-counter" oninput={() => { result = null; error = ''; }}></textarea>
+      <div class="editor-meta"><span>{words} {t(language, words === 1 ? 'editor.word' : 'editor.words')}</span><span id="text-counter">{formatNumber(text.length, language)} / 12,000</span></div>
       <div class="editor-actions">
-        <button type="button" class="clear-button" onclick={clear} disabled={loading || (!text && !result)}>Limpiar</button>
-        <button class="analyze-button" type="submit" disabled={loading || !text.trim()}>{#if loading}<span class="spinner"></span> {demoMode ? 'Simulando consulta…' : 'Analizando…'}{:else}<span>✦</span> {demoMode ? 'Consultar ejemplo' : 'Analizar texto'} <span>↗</span>{/if}</button>
+        <button type="button" class="clear-button" onclick={clear} disabled={loading || (!text && !result)}>{t(language, 'editor.clear')}</button>
+        <button class="analyze-button" type="submit" disabled={loading || !text.trim()}>{#if loading}<span class="spinner"></span> {t(language, demoMode ? 'editor.demoAnalyzing' : 'editor.analyzing')}{:else}<span>✦</span> {t(language, demoMode ? 'editor.demoAnalyze' : 'editor.analyze')} <span>↗</span>{/if}</button>
       </div>
     </form>
-    <p class="privacy" id="text-hint"><span>◇</span> {demoMode ? 'Demo con mocks: selecciona un ejemplo. Nada se envía fuera del navegador.' : 'El texto se envía a Google. Solo el resultado se guarda en este navegador.'}</p>
+    <p class="privacy" id="text-hint"><span>◇</span> {t(language, demoMode ? 'editor.demoPrivacy' : 'editor.privacy')}</p>
   </section>
 
   <section class="results-card" aria-labelledby="results-title" aria-busy={loading} bind:this={resultPanel} tabindex="-1">
-    <div class="card-heading"><div><span class="step">02</span><h2 id="results-title">Lo esencial</h2></div>{#if result}<span class="ready"><span></span> Listo</span>{:else}<span class="result-label">TU ANÁLISIS</span>{/if}</div>
+    <div class="card-heading"><div><span class="step">02</span><h2 id="results-title">{t(language, 'result.title')}</h2></div>{#if result}<span class="ready"><span></span> {t(language, 'result.ready')}</span>{:else}<span class="result-label">{t(language, 'result.label')}</span>{/if}</div>
     <div aria-live="polite" class="result-body">
       {#if loading}
-        <BrandLoading title={demoMode ? 'Simulación de consulta…' : 'Conectando las ideas…'} detail={demoMode ? 'Buscando la respuesta mock asociada al ejemplo.' : 'Gemini está leyendo tu texto. Buscamos lo esencial.'} />
+        <BrandLoading title={t(language, demoMode ? 'result.demoLoading' : 'result.loading')} detail={t(language, demoMode ? 'result.demoLoadingDetail' : 'result.loadingDetail')} />
       {:else if result}
         <div class="result-content">
-          <div class="summary-label">RESUMEN</div><p class="summary">{result.summary}</p>
+          <div class="summary-label">{t(language, 'result.summary')}</div><p class="summary">{result.summary}</p>
           <div class="insight-grid">
-            <div class="insight"><span class="field-label">Sentimiento</span><span class="sentiment {result.sentiment}">{sentiments[result.sentiment].symbol} {sentiments[result.sentiment].label}</span></div>
-            <div class="insight"><span class="field-label">Idioma detectado</span><strong class="language">{languageName(result.language)} <small>{result.language}</small></strong></div>
+            <div class="insight"><span class="field-label">{t(language, 'result.sentiment')}</span><span class="sentiment {result.sentiment}">{sentiments[result.sentiment].symbol} {sentimentName(result.sentiment, language)}</span></div>
+            <div class="insight"><span class="field-label">{t(language, 'result.language')}</span><strong class="language">{displayLanguage(result.language, language)} <small>{result.language}</small></strong></div>
           </div>
-          <div class="keyword-block"><span class="field-label">Palabras clave</span><div class="tags">{#each result.keywords as keyword}<span>{keyword}</span>{/each}</div></div>
-          <div class="result-bottom"><div><span class="field-label">Categoría</span><span class="category {categoryClass(result.category)}">{result.category}</span></div><button class="text-button" onclick={copy}>Copiar JSON ↗</button></div>
-          <p class="ai-note"><time datetime={result.analyzedAt}>{formatDate(result.analyzedAt)}</time> · {demoMode ? 'Respuesta mock relacionada con el ejemplo. No usa IA.' : 'Generado con IA. No es una verificación de hechos.'}</p>
+          <div class="keyword-block"><span class="field-label">{t(language, 'result.keywords')}</span><div class="tags">{#each result.keywords as keyword}<span>{keyword}</span>{/each}</div></div>
+          <div class="result-bottom"><div><span class="field-label">{t(language, 'result.category')}</span><span class="category {categoryClass(result.category)}">{categoryName(result.category, language)}</span></div><button class="text-button" onclick={copy}>{t(language, 'result.copy')} ↗</button></div>
+          <p class="ai-note"><time datetime={result.analyzedAt}>{formatDate(result.analyzedAt, language)}</time> · {t(language, demoMode ? 'result.demoNote' : 'result.aiNote')}</p>
         </div>
       {:else if error}
-        <div class="empty-state error-state"><div class="analysis-orbit">!</div><h3>Intentémoslo de nuevo</h3><p role="alert">{error}</p><span class="empty-caption">Tu texto sigue en el editor.</span></div>
+        <div class="empty-state error-state"><div class="analysis-orbit">!</div><h3>{t(language, 'result.errorTitle')}</h3><p role="alert">{error}</p><span class="empty-caption">{t(language, 'result.errorCaption')}</span></div>
       {:else}
-        <div class="empty-state"><div class="analysis-orbit"><span>✳</span></div><h3>Las ideas están ahí.<br />Vamos a encontrarlas.</h3><p>{demoMode ? 'Selecciona un ejemplo y consulta su respuesta de prueba.' : 'Agrega un texto y deja que la IA conecte los puntos por ti.'}</p><div class="preview-tags"><span>Resumen</span><span>Sentimiento</span><span>Keywords</span></div><span class="empty-caption">{demoMode ? 'MISMOS FLUJOS. DATOS DE PRUEBA.' : 'UN POCO DE IA. MUCHA CLARIDAD.'}</span></div>
+        <div class="empty-state"><div class="analysis-orbit"><span>✳</span></div><h3>{emptyTitle[0]}<br />{emptyTitle[1]}</h3><p>{t(language, demoMode ? 'result.demoEmptyText' : 'result.emptyText')}</p><div class="preview-tags"><span>{t(language, 'result.summary')}</span><span>{t(language, 'result.sentiment')}</span><span>{t(language, 'result.keywords')}</span></div><span class="empty-caption">{t(language, demoMode ? 'result.demoEmptyCaption' : 'result.emptyCaption')}</span></div>
       {/if}
     </div>
   </section>
 </div>
 
-<section class="feature-strip" aria-label="Textos aleatorios por tipo"><span class="strip-label">PRUEBA UN TEXTO.<br /><strong>DESCUBRE OTRA PERSPECTIVA.</strong></span>{#each sampleKinds as kind}<button class="sample-kind" disabled={loading} onclick={() => loadRandom(kind.id)} aria-label={'Texto aleatorio: ' + kind.label}>↗ {kind.label}</button>{/each}</section>
-<p class="sample-note">Ejemplos ficticios precargados · Cambian con cada clic · {demoMode ? 'Cada ejemplo tiene una respuesta mock relacionada.' : 'Analiza cuando estés listo.'}</p>
+<section class="feature-strip" aria-label={t(language, 'strip.aria')}><span class="strip-label">{t(language, 'strip.label')}<br /><strong>{t(language, 'strip.strong')}</strong></span>{#each sampleKinds as kind}<button class="sample-kind" disabled={loading} onclick={() => loadRandom(kind.id)} aria-label={t(language, 'strip.randomAria') + ': ' + t(language, `samples.${kind.id}`)}>↗ {t(language, `samples.${kind.id}`)}</button>{/each}</section>
+<p class="sample-note">{t(language, 'samples.note')} · {t(language, demoMode ? 'samples.demoEnd' : 'samples.productionEnd')}</p>
