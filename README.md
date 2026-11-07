@@ -69,7 +69,7 @@ Para validar el proyecto completo:
 .\run-local.ps1 -Verify
 ```
 
-El modo se selecciona mediante [app.config.json](app.config.json). La rama `main` usa `production`; `demo/github-pages` activa los mocks y la ruta pública. El build estático compilado se publica desde la raíz de `gh-pages`.
+Los dos modos viven en `main` y se configuran mediante [app.config.json](app.config.json). `npm run build` compila producción y `npm run build:demo` activa los mocks y la ruta pública sin modificar el código. Solo el build estático resultante se publica desde la raíz de `gh-pages`.
 
 ## Alcance
 

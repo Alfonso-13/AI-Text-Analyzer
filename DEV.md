@@ -44,15 +44,15 @@ SITE_URL=
 
 La key se lee en `server/index.js` y se envía a Google en el header `x-goog-api-key`. Nunca debe convertirse en una variable `VITE_`.
 
-`app.config.json` contiene la configuración pública del build:
+`app.config.json` contiene la configuración pública de ambos perfiles:
 
-| Campo | `main` | `demo/github-pages` |
+| Campo | Producción | Demo |
 | --- | --- | --- |
-| `mode` | `production` | `demo` |
+| Selector | predeterminado (`mode: production`) | `vite --mode demo` |
 | `base` | `/` | `/AI-Text-Analyzer/` |
 | `siteUrl` | vacío o definido por `SITE_URL` | `https://alfonso-13.github.io` |
 
-No contiene secretos. `mode: demo` desactiva el editor libre y reemplaza la llamada a `/api/analyze` por la respuesta mock asociada al ejemplo seleccionado. También cambia los avisos de la interfaz para evitar presentarla como IA real.
+No contiene secretos. El perfil demo se encuentra en la propiedad `demo`; desactiva el editor libre y reemplaza la llamada a `/api/analyze` por la respuesta mock asociada al ejemplo seleccionado. También cambia los avisos de la interfaz para evitar presentarla como IA real.
 
 ## Comandos
 
@@ -79,26 +79,28 @@ Comandos npm equivalentes:
 ```powershell
 npm run dev             # Vite + Express en desarrollo
 npm run build           # compila el modo definido en app.config.json
+npm run build:demo      # compila el demo estático con mocks
 npm start               # sirve dist y API desde Express
 npm run check           # diagnósticos Svelte
 npm test                # pruebas sin llamadas externas
 npm run audit:secrets   # árbol, historial Git y dist
 npm run verify          # check + test + build + auditoría
+npm run verify:demo     # check + test + build demo + auditoría
 ```
 
 `run-local.ps1` ofrece los modos equivalentes normal, `-Production` y `-Verify`. Los procesos se enlazan únicamente a loopback.
 
 ### Demo estática de GitHub Pages
 
-La aplicación soporta `production` y `demo` desde el mismo código. `app.config.json` selecciona el modo, la ruta base y el origen público; `main` conserva `production` como valor predeterminado. En `demo`, el usuario solo puede seleccionar ejemplos ficticios precargados. Después de una espera de 1.4 segundos, el navegador devuelve la respuesta mock exacta asociada al ejemplo; no ejecuta heurísticas ni llama a Gemini.
+La aplicación soporta `production` y `demo` desde el mismo código y desde la misma rama `main`. `app.config.json` conserva producción como valor predeterminado y define el perfil público del demo. `npm run build:demo` selecciona ese perfil sin editar archivos. En `demo`, el usuario solo puede seleccionar ejemplos ficticios precargados. Después de una espera de 1.4 segundos, el navegador devuelve la respuesta mock exacta asociada al ejemplo; no ejecuta heurísticas ni llama a Gemini.
 
-La rama `demo/github-pages` mantiene la configuración pública del demo (`mode`, `base` y `siteUrl`). `npm run build` genera `dist/`, y esos archivos compilados se publican en la raíz de la rama `gh-pages`. En **Settings > Pages** la fuente debe ser **Deploy from a branch**, rama `gh-pages`, carpeta `/(root)`; nunca debe apuntar a la raíz de `demo/github-pages`, porque allí viven los archivos fuente de Vite.
+`npm run build:demo` genera `dist/`, y esos archivos compilados se publican en la raíz de la rama `gh-pages`. En **Settings > Pages** la fuente debe ser **Deploy from a branch**, rama `gh-pages`, carpeta `/(root)`. `gh-pages` es un artefacto de publicación; el código editable permanece únicamente en `main`.
 
-Para revisar la publicación localmente desde esa rama:
+Para revisar el build público localmente desde `main`:
 
 ```powershell
 npm ci
-npm run build
+npm run build:demo
 npx vite preview --host 127.0.0.1
 ```
 

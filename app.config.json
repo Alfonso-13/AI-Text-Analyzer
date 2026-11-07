@@ -1,5 +1,9 @@
 {
   "mode": "production",
   "base": "/",
-  "siteUrl": ""
+  "siteUrl": "",
+  "demo": {
+    "base": "/AI-Text-Analyzer/",
+    "siteUrl": "https://alfonso-13.github.io"
+  }
 }

@@ -5,15 +5,20 @@ import { resolve } from 'node:path';
 
 function readAppConfig() {
   const config = JSON.parse(readFileSync(resolve('app.config.json'), 'utf8'));
-  if (!['production', 'demo'].includes(config.mode)) throw new Error('app.config.json: mode debe ser production o demo.');
+  if (config.mode !== 'production') throw new Error('app.config.json: el modo predeterminado debe ser production.');
   if (typeof config.base !== 'string' || !config.base.startsWith('/') || !config.base.endsWith('/')) throw new Error('app.config.json: base debe iniciar y terminar con /.');
   if (typeof config.siteUrl !== 'string') throw new Error('app.config.json: siteUrl debe ser texto.');
+  if (!config.demo || typeof config.demo.base !== 'string' || !config.demo.base.startsWith('/') || !config.demo.base.endsWith('/')) throw new Error('app.config.json: demo.base debe iniciar y terminar con /.');
+  if (typeof config.demo.siteUrl !== 'string') throw new Error('app.config.json: demo.siteUrl debe ser texto.');
   return config;
 }
 
 export default defineConfig(({ mode }) => {
-  const appConfig = readAppConfig();
-  const isDemo = appConfig.mode === 'demo';
+  const config = readAppConfig();
+  // `vite --mode demo` selects the public mock profile without editing or duplicating source branches.
+  const isDemo = mode === 'demo';
+  const appMode = isDemo ? 'demo' : config.mode;
+  const appConfig = isDemo ? config.demo : config;
   const base = appConfig.base;
   // This is the only optional public setting read by the HTML transform.
   // Never expose the entire environment through define() or envPrefix.
@@ -29,7 +34,7 @@ export default defineConfig(({ mode }) => {
   const publicUrl = origin ? new URL(base, `${origin}/`).href : undefined;
   return {
     base,
-    define: { 'import.meta.env.VITE_APP_MODE': JSON.stringify(appConfig.mode) },
+    define: { 'import.meta.env.VITE_APP_MODE': JSON.stringify(appMode) },
     plugins: [svelte(), {
       name: 'texta-presentation-metadata',
       enforce: 'post',
