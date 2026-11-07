@@ -1,50 +1,52 @@
 <script>
-  let { demoMode = false } = $props();
-  const steps = [
+  import { translate as t } from '../lib/i18n.js';
+
+  let { demoMode = false, language = 'en' } = $props();
+  const steps = $derived([
     {
       number: '01',
       icon: 'Aa',
-      title: 'Tu navegador',
-      detail: 'Escribes o cargas un texto. La API key nunca llega al frontend.',
-      tag: 'Entrada privada',
+      title: t(language, 'info.step1Title'),
+      detail: t(language, 'info.step1Detail'),
+      tag: t(language, 'info.step1Tag'),
     },
     {
       number: '02',
       icon: '{ }',
-      title: 'API de Texta',
-      detail: 'Express valida el tamaño, limita solicitudes y prepara una instrucción segura.',
+      title: t(language, 'info.step2Title'),
+      detail: t(language, 'info.step2Detail'),
       tag: 'Node.js + Zod',
     },
     {
       number: '03',
       icon: '✦',
       title: 'Gemini',
-      detail: 'La IA devuelve resumen, sentimiento, idioma, palabras clave y categoría.',
-      tag: 'JSON estructurado',
+      detail: t(language, 'info.step3Detail'),
+      tag: t(language, 'info.step3Tag'),
     },
     {
       number: '04',
       icon: '✓',
-      title: 'Resultado local',
-      detail: 'Texta valida la respuesta y guarda solo el resultado en tu navegador.',
+      title: t(language, 'info.step4Title'),
+      detail: t(language, 'info.step4Detail'),
       tag: 'localStorage',
     },
-  ];
+  ]);
 </script>
 
 <section class="info-view" aria-labelledby="info-title">
   <header class="info-hero">
     <div>
-      <div class="eyebrow"><span></span> DEL TEXTO A LO ESENCIAL</div>
-      <h1 class="info-title" id="info-title">Una idea entra.<br /><mark>La claridad sale.</mark></h1>
+      <div class="eyebrow"><span></span> {t(language, 'info.eyebrow')}</div>
+      <h1 class="info-title" id="info-title">{t(language, 'info.title1')}<br /><mark>{t(language, 'info.title2')}</mark></h1>
     </div>
-    <p>Texta combina una interfaz Svelte, una API Node.js y Gemini para transformar contenido libre en datos claros, sin convertir el historial en información compartida.</p>
+    <p>{t(language, 'info.description')}</p>
   </header>
 
   <section class="flow-panel" aria-labelledby="flow-title">
     <div class="flow-heading">
-      <div><span class="step">FLUJO</span><h2 id="flow-title">Cómo viaja un análisis</h2></div>
-      <span class="flow-status"><i></i> Flujo protegido de extremo a extremo</span>
+      <div><span class="step">{t(language, 'info.flow')}</span><h2 id="flow-title">{t(language, 'info.flowTitle')}</h2></div>
+      <span class="flow-status"><i></i> {t(language, 'info.flowStatus')}</span>
     </div>
     <div class="flow-diagram">
       {#each steps as step, index}
@@ -58,19 +60,19 @@
           <div class="flow-connector" aria-hidden="true"><span></span></div>
         {/if}
       {/each}
-      <div class="flow-return" aria-hidden="true"><span></span><em>RETORNO · RESULTADO VALIDADO</em></div>
+      <div class="flow-return" aria-hidden="true"><span></span><em>{t(language, 'info.return')}</em></div>
     </div>
   </section>
 
   <div class="info-cards">
-    <article><span>01 / CAPACIDAD</span><h2>Qué entrega</h2><p>Un resumen breve en español, sentimiento, idioma original, hasta diez palabras clave y una categoría temática.</p></article>
-    <article><span>02 / PRIVACIDAD</span><h2>Qué conserva</h2><p>Hasta 500 resultados en este navegador. No guarda el texto original, no crea cuentas y no comparte el historial con otras personas.</p></article>
-    <article><span>03 / LÍMITES</span><h2>Qué debes saber</h2><p>La IA puede equivocarse y no verifica hechos. Cada instalación necesita su propia API key y cuota disponible de Gemini.</p></article>
+    <article><span>{t(language, 'info.capability')}</span><h2>{t(language, 'info.capabilityTitle')}</h2><p>{t(language, 'info.capabilityText')}</p></article>
+    <article><span>{t(language, 'info.privacy')}</span><h2>{t(language, 'info.privacyTitle')}</h2><p>{t(language, 'info.privacyText')}</p></article>
+    <article><span>{t(language, 'info.limits')}</span><h2>{t(language, 'info.limitsTitle')}</h2><p>{t(language, 'info.limitsText')}</p></article>
   </div>
 
   <aside class="info-callout">
     <div class="callout-symbol">◇</div>
-    <div><strong>{demoMode ? 'Esta publicación usa respuestas mock.' : 'La key se queda en el servidor.'}</strong><p>{demoMode ? 'El diagrama explica el modo productivo. Aquí eliges un ejemplo, se simula la consulta y se devuelve su respuesta de prueba sin llamar a Gemini.' : 'El navegador habla con Texta; Texta habla con Gemini. El resultado regresa validado antes de mostrarse.'}</p></div>
-    <a href="#analyze">{demoMode ? 'Probar los ejemplos' : 'Probar el analizador'} <span>↗</span></a>
+    <div><strong>{t(language, demoMode ? 'info.calloutDemoTitle' : 'info.calloutProdTitle')}</strong><p>{t(language, demoMode ? 'info.calloutDemoText' : 'info.calloutProdText')}</p></div>
+    <a href="#analyze">{t(language, demoMode ? 'info.tryExamples' : 'info.tryAnalyzer')} <span>↗</span></a>
   </aside>
 </section>

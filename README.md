@@ -45,6 +45,8 @@ The demo **does not use Gemini, perform a real AI analysis, or send information 
 ## Engineering highlights
 
 - Svelte 5 interface with responsive light and dark themes.
+- English-first interface with a persistent `EN / ES` selector.
+- Session-scoped cinematic entrance with replay support and reduced-motion fallback.
 - Express 5 API with rate limiting, request timeout, retry boundaries, and safe error handling.
 - Shared Zod contracts for input, model output, browser storage, and HTTP responses.
 - Gemini structured JSON output with `store: false`.
@@ -70,7 +72,7 @@ Screenshots use fictional content. Texta does not verify facts and should not be
 
 ## Run locally
 
-Requirements: Node.js **24.x**, npm, and a Gemini API key.
+Requirements: NVM for Windows, Node.js **24.19.0** installed through NVM, npm, and a Gemini API key.
 
 ```powershell
 git clone https://github.com/Alfonso-13/AI-Text-Analyzer.git
@@ -87,7 +89,7 @@ Add `GEMINI_API_KEY` to `.env`, then run:
 .\run-local.ps1
 ```
 
-Open [http://127.0.0.1:5173](http://127.0.0.1:5173). The script starts Vite and Express; it does not change the active NVM version automatically.
+Open [http://127.0.0.1:5173](http://127.0.0.1:5173). The script runs `nvm use 24.19.0`, validates that exact installation, and then starts Vite and Express with its own `npm.cmd`.
 
 Run the complete production validation with:
 
@@ -96,6 +98,8 @@ Run the complete production validation with:
 ```
 
 Both profiles live in `main` and are defined in [app.config.json](app.config.json). `npm run build` compiles production, while `npm run build:demo` enables the public mock profile without editing source files. Only the compiled output is published from the root of `gh-pages`.
+
+The interface defaults to English and stores the selected language in the browser. The entrance runs once per tab session; append `?intro` to the URL to replay it during review.
 
 ## Scope and reuse
 

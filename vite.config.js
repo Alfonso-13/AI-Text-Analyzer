@@ -46,11 +46,11 @@ export default defineConfig(({ mode }) => {
         if (isDemo) {
           transformed = transformed
             .replace(`${base}site.webmanifest`, `${base}site-demo.webmanifest`)
-            .replace('<title>Texta | Analizador de texto con IA: resumen y sentimiento</title>', '<title>Texta | Demo interactiva sin IA</title>')
-            .replace('Convierte artículos, posts e ideas en claridad con Texta. Obtén resumen, sentimiento, idioma, palabras clave y categoría con inteligencia artificial.', 'Recorre el flujo de Texta con resultados simulados localmente. Sin Gemini, API key ni datos enviados fuera del navegador.')
-            .replace('Resume y analiza el sentimiento, idioma, palabras clave y categoría de tus textos con IA.', 'Prueba la interfaz de Texta mediante una simulación local, sin usar IA ni enviar información.')
-            .replace('Texta | Analizador de texto con IA', 'Texta | Demo interactiva sin IA')
-            .replace('Del texto a lo esencial: resumen, sentimiento, idioma y palabras clave.', 'Explora el flujo visual de Texta con resultados simulados dentro de tu navegador.');
+            .replace('<title>Texta | AI text analyzer: summary and sentiment</title>', '<title>Texta | Interactive demo without AI</title>')
+            .replace('Turn articles, posts, and ideas into clarity with Texta. Get a Spanish summary, sentiment, detected language, keywords, and category through AI.', 'Explore the complete Texta flow with local mock responses. No Gemini, API key, or data sent outside the browser.')
+            .replace('Summarize and analyze sentiment, language, keywords, and category with AI.', 'Try the Texta interface through a local simulation without AI or external data transfer.')
+            .replace('Texta | AI text analyzer', 'Texta | Interactive demo without AI')
+            .replace('From text to essentials: summary, sentiment, language, and keywords.', 'Explore the Texta product flow with responses simulated inside your browser.');
         }
         return transformed;
       },
