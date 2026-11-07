@@ -1,53 +1,54 @@
 <!doctype html>
-<html lang="es-MX">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#e30613" />
     <meta name="color-scheme" content="light" />
-    <title>Texta | Demo interactiva sin IA</title>
-    <meta name="description" content="Recorre el flujo de Texta con resultados simulados localmente. Sin Gemini, API key ni datos enviados fuera del navegador." />
+    <title>Texta | Interactive demo without AI</title>
+    <meta name="description" content="Explore the complete Texta flow with local mock responses. No Gemini, API key, or data sent outside the browser." />
     <meta name="application-name" content="Texta" />
     <meta name="robots" content="index, follow" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Texta" />
-    <meta property="og:locale" content="es_MX" />
-    <meta property="og:title" content="Texta | Mucho texto. Todo claro." />
-    <meta property="og:description" content="Prueba la interfaz de Texta mediante una simulación local, sin usar IA ni enviar información." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Texta | Much text. All clear." />
+    <meta property="og:description" content="Try the Texta interface through a local simulation without AI or external data transfer." />
     <meta property="og:image" content="https://alfonso-13.github.io/AI-Text-Analyzer/social-card.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:alt" content="Texta: Mucho texto. Todo claro. Identidad roja, blanca y negra." />
+    <meta property="og:image:alt" content="Texta: Much text. All clear. Red, white, and black identity." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Texta | Demo interactiva sin IA" />
-    <meta name="twitter:description" content="Explora el flujo visual de Texta con resultados simulados dentro de tu navegador." />
+    <meta name="twitter:title" content="Texta | Interactive demo without AI" />
+    <meta name="twitter:description" content="Explore the Texta product flow with responses simulated inside your browser." />
     <meta name="twitter:image" content="https://alfonso-13.github.io/AI-Text-Analyzer/social-card.png" />
-    <meta name="twitter:image:alt" content="Texta: Mucho texto. Todo claro." />
+    <meta name="twitter:image:alt" content="Texta: Much text. All clear." />
     <link rel="icon" href="/AI-Text-Analyzer/favicon.ico" sizes="64x64" />
     <link rel="icon" href="/AI-Text-Analyzer/favicon.svg" type="image/svg+xml" sizes="any" />
     <link rel="apple-touch-icon" href="/AI-Text-Analyzer/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/AI-Text-Analyzer/site-demo.webmanifest" />
-    <script type="module" crossorigin src="/AI-Text-Analyzer/assets/index-B-B7JRSj.js"></script>
-    <link rel="stylesheet" crossorigin href="/AI-Text-Analyzer/assets/index-QQUsbw1k.css">
+    <style>
+      html, body { min-height: 100%; margin: 0; background: #0d0d0e; }
+      .site-intro { position: fixed; inset: 0; z-index: 5000; visibility: hidden; background: #0d0d0e; }
+    </style>
+    <script type="module" crossorigin src="/AI-Text-Analyzer/assets/index-DB989KYq.js"></script>
+    <link rel="stylesheet" crossorigin href="/AI-Text-Analyzer/assets/index-CASC2jlD.css">
       <link rel="canonical" href="https://alfonso-13.github.io/AI-Text-Analyzer/" />
     <meta property="og:url" content="https://alfonso-13.github.io/AI-Text-Analyzer/" />
   </head>
   <body>
-    <div id="app">
-      <main class="presentation-fallback">
-        <h1>Texta: analizador de texto con inteligencia artificial</h1>
-        <p>Mucho texto. Todo claro. Encuentra lo esencial de artículos, posts e ideas con Google Gemini.</p>
-        <ul>
-          <li>Obtén un resumen en español y detecta el sentimiento del contenido.</li>
-          <li>Identifica el idioma, las palabras clave y la categoría del texto.</li>
-          <li>Consulta el historial y el resumen de categorías de la sesión.</li>
-          <li>Prueba ejemplos precargados antes de analizar tus propios textos.</li>
-        </ul>
-        <p>Texta necesita JavaScript para mostrar el analizador o su demostración estática. La versión completa puede enviar texto a Google; el historial permanece en tu navegador.</p>
-      </main>
+    <div id="site-intro" class="site-intro" aria-hidden="true">
+      <div class="site-intro-grid"></div>
+      <div class="site-intro-accent"></div>
+      <div class="site-intro-content">
+        <div class="site-intro-mark"><span>t</span><i>✳</i></div>
+        <div class="site-intro-wordmark"><strong>texta</strong><small>MUCH TEXT. ALL CLEAR.</small></div>
+        <div class="site-intro-product"><span></span><p>AI TEXT ANALYZER</p><span></span></div>
+      </div>
     </div>
-    <noscript>Activa JavaScript para usar el editor y generar análisis con Texta.</noscript>
+    <div id="app"></div>
+    <noscript>Enable JavaScript to use the editor and generate analyses with Texta.</noscript>
   </body>
 </html>
