@@ -29,6 +29,10 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/site.webmanifest" />
+    <style>
+      html, body { min-height: 100%; margin: 0; background: #0d0d0e; }
+      .site-intro { position: fixed; inset: 0; z-index: 5000; visibility: hidden; background: #0d0d0e; }
+    </style>
   </head>
   <body>
     <div id="site-intro" class="site-intro" aria-hidden="true">
@@ -40,19 +44,7 @@
         <div class="site-intro-product"><span></span><p>AI TEXT ANALYZER</p><span></span></div>
       </div>
     </div>
-    <div id="app">
-      <main class="presentation-fallback">
-        <h1>Texta: artificial intelligence text analyzer</h1>
-        <p>Much text. All clear. Find the essentials in articles, posts, and ideas with Google Gemini.</p>
-        <ul>
-          <li>Get a Spanish summary and detect content sentiment.</li>
-          <li>Identify language, keywords, and text category.</li>
-          <li>Review browser-local history and category summaries.</li>
-          <li>Try predefined examples before analyzing your own text.</li>
-        </ul>
-        <p>Texta needs JavaScript to display the analyzer or its static demo. The complete version may send text to Google; history remains in your browser.</p>
-      </main>
-    </div>
+    <div id="app"></div>
     <noscript>Enable JavaScript to use the editor and generate analyses with Texta.</noscript>
     <script type="module" src="/src/intro.js"></script>
     <script type="module" src="/src/main.js"></script>

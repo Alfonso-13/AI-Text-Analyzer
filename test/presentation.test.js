@@ -28,5 +28,8 @@ test('The initial document is English and includes the cinematic entrance before
   assert.match(html, /<html lang="en">/);
   assert.match(html, /id="site-intro"/);
   assert.ok(html.indexOf('id="site-intro"') < html.indexOf('id="app"'));
+  assert.match(html, /<div id="app"><\/div>/);
+  assert.doesNotMatch(html, /presentation-fallback/);
+  assert.ok(html.indexOf('.site-intro {') < html.indexOf('<body>'));
   assert.match(html, /src="\/src\/intro\.js"/);
 });
