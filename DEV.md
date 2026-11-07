@@ -83,7 +83,7 @@ The result must start with `v24`. The recommended local launcher is:
 .\run-local.ps1 -Production # production build + local server
 ```
 
-The script checks Node 24, creates `.env` from the template when missing, and installs dependencies when `node_modules` does not exist. It does not change the active NVM version automatically.
+The script requires the exact documented Node.js version. On every launch, it runs `nvm use 24.19.0`, validates the executable inside that NVM installation, and invokes its own `npm.cmd` so another Node entry earlier in `PATH` cannot take precedence. It also creates `.env` from the template when missing and installs dependencies when `node_modules` does not exist. If NVM or the required version is unavailable, it stops with an installation hint.
 
 Equivalent npm commands:
 
