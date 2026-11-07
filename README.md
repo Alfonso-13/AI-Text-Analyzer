@@ -6,6 +6,17 @@ Nació como proyecto de aprendizaje y portafolio para demostrar una integración
 
 ![Analizador Texta en tema claro](docs/screenshots/texta-desktop-light.png)
 
+## Demo interactiva
+
+[Abrir Texta Demo en GitHub Pages](https://alfonso-13.github.io/AI-Text-Analyzer/)
+
+La publicación permite recorrer el analizador, la carga, el resultado, el historial y el resumen sin configurar una API key. Utiliza datos de prueba y reglas locales para simular la respuesta; **no usa Gemini, no realiza un análisis real y no envía el texto fuera del navegador**.
+
+| Modo | Propósito | Procesamiento |
+| --- | --- | --- |
+| `production` | Ejecutar la aplicación completa localmente | Express + Google Gemini |
+| `demo` | Mostrar el flujo públicamente y sin credenciales | Simulación local en el navegador |
+
 ## Qué demuestra
 
 - Svelte 5 y una interfaz adaptable con temas claro y oscuro.
@@ -58,8 +69,10 @@ Para validar el proyecto completo:
 .\run-local.ps1 -Verify
 ```
 
+El modo se selecciona mediante [app.config.json](app.config.json). La rama `main` usa `production`; la rama `demo/github-pages` cambia únicamente la configuración de ejecución y añade el workflow de Pages.
+
 ## Alcance
 
-Es una demo educativa y reutilizable, no un servicio público operado. Cada instalación usa su propia API key y cuota. Una publicación abierta requeriría autenticación, control de presupuesto, protección antiabuso y observabilidad.
+Es una demostración educativa y reutilizable, no un servicio público de IA operado. Cada instalación en modo `production` usa su propia API key y cuota. Una publicación abierta con análisis reales requeriría autenticación, control de presupuesto, protección antiabuso y observabilidad; por eso GitHub Pages ofrece solamente el modo simulado.
 
 La guía de configuración, arquitectura, contrato API, privacidad y comandos está en [DEV.md](DEV.md). Distribuido bajo [licencia MIT](LICENSE).

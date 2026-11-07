@@ -13,6 +13,17 @@ flowchart LR
 
 El frontend y el backend viven en el mismo repositorio. En desarrollo Vite atiende en `127.0.0.1:5173` y envía `/api` a Express en `127.0.0.1:3001`. En modo compilado Express sirve `dist/`.
 
+El build admite dos recorridos desde el mismo código:
+
+```mermaid
+flowchart LR
+  Production[production] --> API[Express + Gemini]
+  Demo[demo] --> Simulator[Simulador local]
+  API --> Result[Resultado validado]
+  Simulator --> Result
+  Result --> Storage[(localStorage)]
+```
+
 ## Configuración
 
 Copia `.env.example` como `.env` sin sobrescribir una configuración existente:
@@ -32,6 +43,16 @@ SITE_URL=
 | `SITE_URL` | Origen HTTPS público para canonical y Open Graph al compilar | Vacío |
 
 La key se lee en `server/index.js` y se envía a Google en el header `x-goog-api-key`. Nunca debe convertirse en una variable `VITE_`.
+
+`app.config.json` contiene la configuración pública del build:
+
+| Campo | `main` | `demo/github-pages` |
+| --- | --- | --- |
+| `mode` | `production` | `demo` |
+| `base` | `/` | `/AI-Text-Analyzer/` |
+| `siteUrl` | vacío o definido por `SITE_URL` | `https://alfonso-13.github.io` |
+
+No contiene secretos. `mode: demo` reemplaza la llamada a `/api/analyze` por una respuesta local simulada y cambia los avisos de la interfaz para evitar presentarla como IA real.
 
 ## Comandos
 
@@ -73,6 +94,16 @@ La aplicación soporta `production` y `demo` desde el mismo código. `app.config
 
 La rama `demo/github-pages` cambia únicamente esa configuración a `demo` y añade `pages-demo.yml`, que valida, compila y publica `dist/`. En GitHub se debe seleccionar **GitHub Actions** como fuente de Pages; no es necesario rastrear archivos compilados ni configurar secretos.
 
+Para revisar la publicación localmente desde esa rama:
+
+```powershell
+npm ci
+npm run build
+npx vite preview --host 127.0.0.1
+```
+
+La demo conserva resultados simulados en `localStorage` para que Historial y Resumen sean navegables. No guarda el texto original, no consume cuota y no debe utilizarse para evaluar la calidad de un análisis de IA.
+
 ## Contrato de análisis
 
 `POST /api/analyze` requiere `Content-Type: application/json`:
@@ -106,6 +137,8 @@ El servidor expone además `GET /api/health`. El historial y el resumen no son e
 - El navegador guarda hasta 500 resultados validados bajo `texta.analysis-history.v1`.
 - El historial no contiene el texto original, no cruza navegadores y se pierde al borrar los datos del sitio.
 - Las salidas se renderizan como texto, nunca como HTML interpretado.
+
+En modo `demo`, el texto no se envía al backend ni a Google. El navegador genera una respuesta de muestra mediante reglas sencillas y guarda únicamente ese resultado simulado en el mismo historial local.
 
 ## Resiliencia y seguridad
 
